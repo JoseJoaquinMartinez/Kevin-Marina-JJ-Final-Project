@@ -71,7 +71,8 @@ const getState = ({ getStore, setStore }) => {
 			},
 			postUserData: async (formData) => {
 				const store = getStore()
-				const response = await fetch(`${process.env.BACKEND_URL}/user_data`, {
+				const decoded = jwtDecode(store.token);
+				const response = await fetch(`${process.env.BACKEND_URL}/user_data/${decoded.sub}`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -81,12 +82,11 @@ const getState = ({ getStore, setStore }) => {
 				});
 
 				if (response.ok) {
-					const decoded = jwtDecode(store.token);
 					sessionStorage.setItem("role", decoded.role);
 					sessionStorage.setItem("user_id", decoded.sub);
 					setStore({ user_id: decoded.sub, role: decoded.role });
 				} else {
-					console.error('Error sending user data');
+					alert('Error sending user data');
 				}
 			},
 			fetchUserData: async () => {
@@ -101,7 +101,7 @@ const getState = ({ getStore, setStore }) => {
 							method: 'GET',
 							headers: {
 								'Content-Type': 'application/json',
-								'Authorization': 'Bearer ' + store.token
+								Authorization: 'Bearer ' + store.token
 							}
 						});
 
@@ -135,7 +135,7 @@ const getState = ({ getStore, setStore }) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/actual_routine`, {
 						headers: {
-							'Authorization': `Bearer ${store.token}`
+							Authorization: `Bearer ${store.token}`
 						}
 					});
 
@@ -150,6 +150,25 @@ const getState = ({ getStore, setStore }) => {
 					console.error('Error fetching routine:', error);
 				}
 			},
+			patchUserData: async (formData) => {
+				const store = getStore();
+				const response = await fetch(`${process.env.BACKEND_URL}/user_data/${store.user_id}`, {
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': "Bearer " + store.token
+					},
+					body: JSON.stringify(formData),
+				});
+				if (response.ok) {
+					const data = await response.json();
+					sessionStorage.setItem("user_data", JSON.stringify(data));
+					setStore({ user_data: data });
+				} else {
+					alert('Error editing user data');
+				}
+			},
+
 		},
 	};
 };

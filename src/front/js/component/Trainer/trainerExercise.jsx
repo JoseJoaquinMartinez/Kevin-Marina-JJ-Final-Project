@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from "../../store/appContext";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../User/loader.jsx';
+import ExerciseTable from './exerciseTable.jsx';
+import '../../../styles/Trainer-styles/trainerExercise.css';
 
 const TrainerExercise = () => {
-  const { store } = useContext(Context);
+  const { userId } = useParams();
+  const { store, actions } = useContext(Context);
   const [exercises, setExercises] = useState([]);
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [search, setSearch] = useState('');
-  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -31,12 +33,17 @@ const TrainerExercise = () => {
       setError(null);
       try {
         const response = await fetch("https://exercisedb.p.rapidapi.com/exercises?limit=1300", store.exerciseOptions);
+        if (response.ok) {
+          const exerciseData = await actions.fetchDataExercise(
+            "https://exercisedb.p.rapidapi.com/exercises?limit=1300",
+            store.exerciseOptions
+          );
+          setExercises(exerciseData);
+          setFilteredExercises(exerciseData);
+        }
         if (!response.ok) {
           throw new Error('Error fetching exercises');
         }
-        const exerciseData = await response.json();
-        setExercises(exerciseData);
-        setFilteredExercises(exerciseData);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -84,7 +91,7 @@ const TrainerExercise = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const trainerDataId = 1;
-    const user_id = id;
+    const userDataId = userId;
 
     const data = {
       trainer_data_id: trainerDataId,
@@ -100,7 +107,7 @@ const TrainerExercise = () => {
     };
 
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/trainer/${user_id}/set_routine`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/trainer/${userDataId}/set_routine`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,57 +120,54 @@ const TrainerExercise = () => {
         alert('Routine saved successfully!');
       } else {
         const errorData = await response.json();
-        console.error('Error saving routine:', errorData);
+        alert('Error saving routine:', errorData);
       }
     } catch (error) {
-      console.error('Error saving routine:', error);
+      alert('Error saving routine:', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Search exercises..."
-        value={search}
-        onChange={handleSearch}
-      />
-      {loading && <Loader />}
-      {error && <p>{error}</p>}
+    <div className="trainer-exercise-container">
+      <div className="exercise-table-container">
+        <ExerciseTable routine={routine} handleRemoveExercise={handleRemoveExercise} />
+      </div>
+      <div className="routine-form-container">
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Search exercises..."
+            value={search}
+            onChange={handleSearch}
+            className="search-input-trainer"
+          />
+          {loading && <Loader />}
+          {error && <p className="error-message">{error}</p>}
 
-      {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => (
-        <div key={day}>
-          <h3>{day.charAt(0).toUpperCase() + day.slice(1)}</h3>
-
-          <ul>
-            {routine[day].length === 0 ? (
-              <li>Descanso</li>
-            ) : (
-              routine[day].map((exercise, index) => (
-                <li key={index}>
-                  {exercise}
-                  <span onClick={() => handleRemoveExercise(day, index)} style={{ cursor: 'pointer', color: 'red' }}> ❌</span>
-                </li>
-              ))
-            )}
-          </ul>
-
-          <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
-            <option value="">Select exercise</option>
-            {filteredExercises.map(ex => (
-              <option key={ex.id} value={ex.name}>{ex.name}</option>
+          <div className="days-container">
+            {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => (
+              <div key={day} className="day-section">
+                <label>{day.charAt(0).toUpperCase() + day.slice(1)}</label>
+                <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
+                  <option value="">Select exercise</option>
+                  {filteredExercises.map(ex => (
+                    <option key={ex.id} value={ex.name}>{ex.name}</option>
+                  ))}
+                </select>
+                <select value={selectedReps} onChange={(e) => setSelectedReps(parseInt(e.target.value))}>
+                  {[...Array(1000)].map((_, i) => (
+                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                  ))}
+                </select>
+                <button type="button" onClick={() => handleAddExercise(day)}>Add Exercise</button>
+              </div>
             ))}
-          </select>
-          <select value={selectedReps} onChange={(e) => setSelectedReps(parseInt(e.target.value))}>
-            {[...Array(1000)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>{i + 1}</option>
-            ))}
-          </select>
-          <button type="button" onClick={() => handleAddExercise(day)}>Add Exercise</button>
-        </div>
-      ))}
-      <button type="submit">Save Routine</button>
-    </form>
+          </div>
+
+          <button type="submit" className="save-button">Save Routine</button>
+        </form>
+      </div>
+    </div>
   );
 };
 

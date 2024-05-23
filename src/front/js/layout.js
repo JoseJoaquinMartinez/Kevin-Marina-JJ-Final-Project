@@ -24,6 +24,7 @@ const Layout = () => {
     const basename = process.env.BASENAME || "";
 
     const userToken = store.token;
+
     return (
         <div>
             <BrowserRouter basename={basename}>
@@ -43,8 +44,9 @@ const Layout = () => {
                             <Route path="/exercise/:id" element={<ExerciseDetail />} />
                         </Route>
                         <Route element={<ProtectedRoute roles={['trainer']} />}>
+
                             <Route path="/trainer/:id" element={<Trainer />} />
-                            <Route path="/trainer/:tainer_id/:user_id" element={<TrainerUserDetail />} />
+                            <Route path="/trainer/:trainerId/user/:userId" element={<TrainerUserDetail />} />
                         </Route>
                         <Route path="*" element={<h1>Not found!</h1>} />
                     </Routes>
