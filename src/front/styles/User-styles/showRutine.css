@@ -16,6 +16,15 @@
 
 }
 
+.routine-loader-title {
+    border: 2px solid var(--primary-color);
+
+
+    font-size: 1.5rem;
+
+    text-align: center;
+}
+
 .routine-table {
     width: 100%;
     border-collapse: collapse;

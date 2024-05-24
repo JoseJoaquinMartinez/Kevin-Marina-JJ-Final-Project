@@ -40,6 +40,7 @@ const TrainerExercise = () => {
           );
           setExercises(exerciseData);
           setFilteredExercises(exerciseData);
+
         }
         if (!response.ok) {
           throw new Error('Error fetching exercises');
@@ -149,17 +150,17 @@ const TrainerExercise = () => {
               <div key={day} className="day-section">
                 <label>{day.charAt(0).toUpperCase() + day.slice(1)}</label>
                 <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
-                  <option value="">Select exercise</option>
+                  <option value="" className='select-exercise-option'>Select exercise</option>
                   {filteredExercises.map(ex => (
                     <option key={ex.id} value={ex.name}>{ex.name}</option>
                   ))}
                 </select>
                 <select value={selectedReps} onChange={(e) => setSelectedReps(parseInt(e.target.value))}>
                   {[...Array(1000)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                    <option key={i + 1} value={i + 1} className='reps-select'>{i + 1}</option>
                   ))}
                 </select>
-                <button type="button" onClick={() => handleAddExercise(day)}>Add Exercise</button>
+                <button type="button" className='add-exercise-button' onClick={() => handleAddExercise(day)}>Add Exercise</button>
               </div>
             ))}
           </div>

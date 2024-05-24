@@ -1,5 +1,7 @@
 .videos-section {
     margin-top: 20px;
+    text-align: center;
+
 }
 
 .videos-heading {
@@ -13,6 +15,8 @@
 
 .videos-container {
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 20px;
 }
 
@@ -21,11 +25,10 @@
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    width: 200px;
-    /* Ajusta el tamaño según tu diseño */
-    border: 1px solid #ddd;
+    width: 400px;
+    border: 1px solid var(--primary-color);
     border-radius: 10px;
-    overflow: hidden;
+    overflow-x: auto;
     transition: transform 0.3s ease;
 }
 
@@ -35,7 +38,7 @@
 
 .video-thumbnail {
     width: 100%;
-    height: auto;
+    min-height: 300px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -48,10 +51,11 @@
     margin: 0;
     font-size: 16px;
     font-weight: bold;
+    color: var(--primary-color);
 }
 
 .video-channel {
     margin: 0;
     font-size: 14px;
-    color: #555;
+    color: var(--secondary-color);
 }

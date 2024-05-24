@@ -39,7 +39,8 @@ const TrainerView = () => {
   }, []);
 
   const handleDetailClick = (userId) => {
-    navigate(`/trainer/${store.user_id}/user/${userId}`);
+    navigate(`/trainer/${store.user_id}/user/${userId}`)
+
   };
 
   return (

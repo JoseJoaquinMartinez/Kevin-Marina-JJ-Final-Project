@@ -22,10 +22,10 @@ const UserRoutine = () => {
 
     if (!routine) {
         return (
-            <>
-                <h4>Loading routine...</h4>
+            <div className='routine-loader-title'>
+                <h4 >No routine just yet.</h4>
                 <Loader />
-            </>
+            </div>
         );
     }
 
