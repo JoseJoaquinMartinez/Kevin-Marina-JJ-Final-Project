@@ -1,0 +1,92 @@
+.trainer-exercise-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+.exercise-table-container {
+    width: 100%;
+    margin-bottom: 20px;
+
+
+}
+
+.routine-form-container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: var(--background-color);
+    border-radius: 16px;
+}
+
+.search-input-trainer {
+    height: 50px;
+    text-align: center;
+    font-weight: 700;
+    border: 1px solid var(--primary-color);
+    border-radius: 40px;
+    padding-top: 10px;
+}
+
+.select-exercise-option {
+    text-align: center;
+}
+
+.reps-select {
+    text-align: center;
+
+}
+
+.days-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0 5px;
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+.day-section {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--secondary-color);
+    text-align: center;
+    border-radius: 3px;
+}
+
+.exercise-select,
+.reps-select {
+    width: 100%;
+    padding: 5px;
+}
+
+.add-exercise-button {
+    padding: 5px 10px;
+    margin-top: 5px;
+    background-color: var(--primary-color);
+    color: var(--white-text);
+    border: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+.save-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
