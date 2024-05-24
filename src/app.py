@@ -182,6 +182,48 @@ def add_or_update_user_data(id):
         return jsonify(serialized_new_user_data), 200
 
 # Trainer Endpoints
+@app.route('/trainer', methods=['POST'])
+def create_new_trainer():
+    data = request.json
+    check_if_email_already_exists = Trainer.query.filter_by(email=data["email"]).first()
+    if check_if_email_already_exists:
+        raise APIException('Email already exists', status_code=400)
+    
+    new_trainer = Trainer( 
+        email=data["email"],
+        password=data["password"],
+        role="trainer",
+    )
+
+    db.session.add(new_trainer)
+    db.session.commit()
+
+    new_trainer_id = new_trainer.id
+
+    access_token = create_access_token(identity=new_trainer_id, additional_claims={"role": new_trainer.role})
+
+    return jsonify({'access_token': access_token}), 200
+
+@app.route('/trainer/<int:id>', methods=['POST'])
+@jwt_required()
+def post_trainer_data(id):
+    data = request.json
+
+    new_trainer_data = Trainer_data(
+        trainer_name=data.get("trainer_name"),
+        profile_picture= "",
+        trainer_id=id,  
+    )
+
+    db.session.add(new_trainer_data)
+    db.session.commit()
+
+    serialized_new_trainer_data = new_trainer_data.serialize()
+
+    return jsonify(serialized_new_trainer_data), 200
+
+
+
 @app.route('/trainer/<int:id>')
 @jwt_required()
 def get_trainer_users(id):
