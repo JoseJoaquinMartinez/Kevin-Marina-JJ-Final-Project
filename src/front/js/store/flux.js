@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+import Swal from 'sweetalert2';
 
 const getState = ({ getStore, setStore }) => {
 	return {
@@ -31,6 +32,13 @@ const getState = ({ getStore, setStore }) => {
 				sessionStorage.removeItem("userRoutine");
 				sessionStorage.removeItem("user_data");
 				setStore({ token: "", role: null, user_id: null, routine: null });
+				Swal.fire({
+					title: "Logged out",
+					text: "You have been logged out",
+					type: "success",
+					showConfirmButton: false,
+					timer: 1000,
+				});
 			},
 			login: async (loginData) => {
 				const response = await fetch(`${process.env.BACKEND_URL}/login`, {
@@ -47,8 +55,21 @@ const getState = ({ getStore, setStore }) => {
 					sessionStorage.setItem("role", decoded.role);
 					sessionStorage.setItem("user_id", decoded.sub);
 					setStore({ token: data.access_token, role: decoded.role, user_id: decoded.sub });
+					Swal.fire({
+						title: "Logged in",
+						text: "You have been logged in",
+						type: "success",
+						showConfirmButton: false,
+						timer: 1000,
+					});
 				} else {
-					alert("Wrong user or password");
+					Swal.fire({
+						title: "Error",
+						text: "Wrong user or password",
+						type: "error",
+						showConfirmButton: false,
+						timer: 1000,
+					});
 				}
 			},
 			signUp: async (email, password) => {
@@ -60,12 +81,25 @@ const getState = ({ getStore, setStore }) => {
 					body: JSON.stringify(email, password)
 				})
 				if (!response.ok) {
-					alert("Error registering");
+					Swal.fire({
+						title: "Error",
+						text: "Error registering",
+						type: "error",
+						showConfirmButton: false,
+						timer: 1000,
+					});
 				}
 				if (response.ok) {
 					const data = await response.json()
 					sessionStorage.setItem("token", data.access_token);
 					setStore({ token: data.access_token });
+					Swal.fire({
+						title: "Success",
+						text: "You have been registered",
+						type: "success",
+						showConfirmButton: false,
+						timer: 1000,
+					});
 					return true;
 				}
 			},
@@ -86,7 +120,13 @@ const getState = ({ getStore, setStore }) => {
 					sessionStorage.setItem("user_id", decoded.sub);
 					setStore({ user_id: decoded.sub, role: decoded.role });
 				} else {
-					alert('Error sending user data');
+					Swal.fire({
+						title: "Error",
+						text: "Error sending user data",
+						type: "error",
+						showConfirmButton: false,
+						timer: 1000,
+					});
 				}
 			},
 			fetchUserData: async () => {
@@ -110,10 +150,23 @@ const getState = ({ getStore, setStore }) => {
 							sessionStorage.setItem("user_data", JSON.stringify(userData));
 							setStore({ user_data: userData });
 						} else {
-							console.error('Error fetching user data:', response.statusText);
+							Swal.fire({
+								title: "Error",
+								text: "Error fetching user data",
+								type: "error",
+								showConfirmButton: false,
+								timer: 1000,
+							});
+
 						}
 					} catch (error) {
-						console.error('Error fetching user data:', error);
+						Swal.fire({
+							title: "Error",
+							text: "Error fetching user data",
+							type: "error",
+							showConfirmButton: false,
+							timer: 1000,
+						});
 					}
 				}
 			},
@@ -144,10 +197,23 @@ const getState = ({ getStore, setStore }) => {
 						sessionStorage.setItem('userRoutine', JSON.stringify(data.actual_routine));
 						setStore({ routine: data.actual_routine });
 					} else {
-						console.error('Error fetching routine:', response.statusText);
+						Swal.fire({
+							title: "Error",
+							text: "Error fetching routine",
+							type: "error",
+							showConfirmButton: false,
+							timer: 1000,
+						});
+
 					}
 				} catch (error) {
-					console.error('Error fetching routine:', error);
+					Swal.fire({
+						title: "Error",
+						text: "Error fetching routine",
+						type: "error",
+						showConfirmButton: false,
+						timer: 1000,
+					});
 				}
 			},
 			patchUserData: async (formData) => {
@@ -165,7 +231,13 @@ const getState = ({ getStore, setStore }) => {
 					sessionStorage.setItem("user_data", JSON.stringify(data));
 					setStore({ user_data: data });
 				} else {
-					alert('Error editing user data');
+					Swarl.fire({
+						title: "Error",
+						text: "Error editing user data",
+						type: "error",
+						showConfirmButton: false,
+						timer: 1000,
+					});
 				}
 			},
 

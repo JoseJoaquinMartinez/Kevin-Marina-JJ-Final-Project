@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../User/loader.jsx';
 import ExerciseTable from './exerciseTable.jsx';
 import '../../../styles/Trainer-styles/trainerExercise.css';
+import Swal from 'sweetalert2';
 
 const TrainerExercise = () => {
   const { userId } = useParams();
@@ -69,7 +70,13 @@ const TrainerExercise = () => {
 
   const handleAddExercise = (day) => {
     if (!selectedExercise) {
-      alert('Please select an exercise.');
+      Swal.fire({
+        title: "Error",
+        text: "Please select an exercise",
+        type: "error",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       return;
     }
     setRoutine(prevRoutine => {
@@ -118,13 +125,30 @@ const TrainerExercise = () => {
       });
 
       if (response.ok) {
-        alert('Routine saved successfully!');
+        Swal.fire({
+          title: "Success",
+          text: "Routine saved successfully",
+          type: "success",
+          showConfirmButton: true,
+        });
       } else {
         const errorData = await response.json();
-        alert('Error saving routine:', errorData);
+        Swal.fire({
+          title: "Error",
+          text: "Error saving routine",
+          type: "error",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       }
     } catch (error) {
-      alert('Error saving routine:', error);
+      Swal.fire({
+        title: "Error",
+        text: "Error saving routine",
+        type: "error",
+        showConfirmButton: false,
+        timer: 1000,
+      });
     }
   };
 
