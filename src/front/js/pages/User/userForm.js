@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./../../../styles/User-styles/userForm.css";
 import { Context } from "../../store/appContext";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 
 const UserForm = () => {
@@ -33,14 +34,26 @@ const UserForm = () => {
                 formData.user_illness === '' ||
                 formData.user_age === ''
             ) {
-                alert('Please, complete all fields.');
+                Swal.fire({
+                    title: "Error",
+                    text: "Please, complete all fields",
+                    type: "error",
+                    showConfirmButton: false,
+                    timer: 1000,
+                });
                 return;
             } else {
                 await actions.postUserData(formData);
                 navigate(`/user/${store.user_id}`)
             }
         } catch (error) {
-            console.error('Error de red:', error);
+            Swal.fire({
+                title: "Error",
+                text: "Error de red",
+                type: "error",
+                showConfirmButton: false,
+                timer: 1000,
+            });
         }
     };
 

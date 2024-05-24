@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import "../../../styles/Landing-styles/signUp.css";
 import { Context } from "../../store/appContext";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 export const SignUp = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -28,7 +29,13 @@ export const SignUp = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		if (password !== confirmPassword) {
-			alert("Incorrect password");
+			Swal.fire({
+				title: "Error",
+				text: "Passwords does not match",
+				type: "error",
+				showConfirmButton: false,
+				timer: 1000,
+			});
 			return;
 		}
 		await actions.signUp({ email, password });

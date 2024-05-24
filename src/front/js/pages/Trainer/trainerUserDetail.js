@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from "../../store/appContext";
 import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
+
 import Loader from "../../component/User/loader.jsx";
 import TrainerExercise from '../../component/Trainer/trainerExercise.jsx';
 
@@ -32,7 +35,7 @@ const TrainerUserDetail = () => {
                 const data = await userData.json();
                 setFormData(data);
             } else {
-                alert('Error fetching user data:', userData.statusText);
+                Swal.fire({ title: "Error", text: "Error fetching user data", type: "error", showConfirmButton: false, timer: 1000 });
             }
         }
         getUserData();
