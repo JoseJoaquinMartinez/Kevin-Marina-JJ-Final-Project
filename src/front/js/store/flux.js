@@ -197,23 +197,23 @@ const getState = ({ getStore, setStore }) => {
 						sessionStorage.setItem('userRoutine', JSON.stringify(data.actual_routine));
 						setStore({ routine: data.actual_routine });
 					} else {
-						Swal.fire({
+						/* Swal.fire({
 							title: "Error",
-							text: "Error fetching routine",
+							text: "No routine yet",
 							type: "error",
 							showConfirmButton: false,
 							timer: 1000,
-						});
+						}); */
 
 					}
 				} catch (error) {
-					Swal.fire({
+					/* Swal.fire({
 						title: "Error",
-						text: "Error fetching routine",
+						text: "No routine yet",
 						type: "error",
 						showConfirmButton: false,
 						timer: 1000,
-					});
+					}); */
 				}
 			},
 			patchUserData: async (formData) => {

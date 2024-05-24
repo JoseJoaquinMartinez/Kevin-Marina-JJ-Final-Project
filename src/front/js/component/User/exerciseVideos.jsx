@@ -23,7 +23,7 @@ const ExerciseVideos = ({ exerciseVideos, name }) => {
         {loading ? (
           <Loader />
         ) : (
-          exerciseVideos?.slice(0, 3)?.map((item, index) => (
+          exerciseVideos?.slice(0, 4)?.map((item, index) => (
             <a
               key={index}
               className="exercise-video"
