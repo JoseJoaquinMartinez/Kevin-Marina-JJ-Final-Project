@@ -13,7 +13,15 @@ const PersonalData = () => {
     if (!store.user_data) {
       actions.fetchUserData();
     }
+
   }, [store.user_id]);
+
+  useEffect(() => {
+    const getUserImage = async () => {
+      await actions.fetchUserImage();
+    }
+    getUserImage();
+  }, [store.user_image]);
 
   const handleEditForm = () => {
     navigate("/user/edit_form");
@@ -27,9 +35,10 @@ const PersonalData = () => {
       </>
     );
   }
-
+  console.log(store.user_image);
   return (
     <div className='personalData'>
+      <img src={store.user_image} alt="user-image" className='user-image' />
       <div className='user-info'>
         <p className='dataForm'>Full Name: {store.user_data.user_name}</p>
         <p className='dataForm'>Weight: {store.user_data.user_weight}</p>

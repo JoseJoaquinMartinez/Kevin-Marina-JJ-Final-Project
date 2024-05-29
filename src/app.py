@@ -1,15 +1,17 @@
 import os
-from flask import Flask, request, jsonify, url_for, send_from_directory, abort
+from flask import Flask, request, jsonify, url_for, send_from_directory, abort, Response
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db, Trainer, Trainer_data, User, User_data, Routines, Exercise
+from api.models import db, Trainer, Trainer_data, User, User_data, Routines, Exercise, Image
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from datetime import timedelta
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
+import base64
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
@@ -180,6 +182,50 @@ def add_or_update_user_data(id):
         serialized_new_user_data = new_user_data.serialize()
 
         return jsonify(serialized_new_user_data), 200
+
+@app.route('/user/<int:user_id>/profile_picture', methods=['POST'])
+@jwt_required()
+def upload_user_profile_picture(user_id):
+    user_data = User_data.query.filter_by(user_id=user_id).first()
+    if not user_data:
+        raise APIException('User not found', status_code=404)
+
+    imagen = request.files['user_profile_picture']
+    if imagen:
+        filename = secure_filename(imagen.filename)
+        mimetype = imagen.mimetype
+
+        
+        img_bytes = imagen.read()
+
+        new_image = Image(
+            user_data_id=user_data.id,
+            img=img_bytes,
+            name=filename,
+            mimetype=mimetype,
+        )
+        db.session.add(new_image)
+        db.session.commit()
+        serialized_image = new_image.serialize()
+        return jsonify(serialized_image), 200
+    else:
+        raise APIException('No image selected', status_code=400)
+
+# Get user profile picture
+@app.route('/user/<int:user_id>/profile_picture', methods=['GET'])
+@jwt_required()
+def get_user_profile_picture(user_id):
+    user_profile_image = Image.query.filter_by(user_data_id=user_id).first()
+    if not user_profile_image:
+        raise APIException('User profile image not found', status_code=404)
+
+    image_data = {
+        'id': user_profile_image.id,
+        'img': base64.b64encode(user_profile_image.img).decode('utf-8'),
+        'name': user_profile_image.name,
+        'mimetype': user_profile_image.mimetype
+    }
+    return jsonify(image_data), 200
 
 # Trainer Endpoints
 @app.route('/trainer', methods=['POST'])

@@ -9,6 +9,7 @@ const getState = ({ getStore, setStore }) => {
 			user_id: sessionStorage.getItem("user_id") || null,
 			routine: JSON.parse(sessionStorage.getItem("userRoutine")) || null,
 			user_data: JSON.parse(sessionStorage.getItem("user_data")) || null,
+			user_image: sessionStorage.getItem("user_image") || null,
 			exerciseOptions: {
 				method: 'GET',
 				headers: {
@@ -240,6 +241,65 @@ const getState = ({ getStore, setStore }) => {
 					});
 				}
 			},
+			fetchUserImage: async () => {
+				const store = getStore();
+				try {
+					const imgResponse = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
+						headers: {
+							Authorization: `Bearer ${store.token}`
+						}
+					});
+
+					if (imgResponse.ok) {
+						const imgData = await imgResponse.json();
+						const userImage = `data:${imgData.mimetype};base64,${imgData.img}`;
+						sessionStorage.setItem("user_image", userImage);
+						setStore({ user_image: userImage });
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "Error fetching user image",
+							type: "error",
+							showConfirmButton: false,
+							timer: 1000,
+						});
+					}
+				} catch (error) {
+					Swal.fire({
+						title: "Error",
+						text: "Error fetching user image",
+						type: "error",
+						showConfirmButton: false,
+						timer: 1000,
+					});
+				}
+			},
+			updateUserImage: async (file) => {
+				const store = getStore();
+				const formData = new FormData();
+				formData.append("file", file);
+				const response = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `Bearer ${store.token}`
+					},
+					body: formData,
+				});
+				if (response.ok) {
+					const data = await response.json();
+					sessionStorage.setItem("user_image", data.img);
+					setStore({ user_image: data.img });
+				} else {
+					Swal.fire({
+						title: "Error",
+						text: "Error updating user image",
+						type: "error",
+						showConfirmButton: false,
+						timer: 1000,
+					});
+				}
+			}
 
 		},
 	};

@@ -35,11 +35,6 @@ export const EditForm = () => {
     navigate(`/user/${store.user_id}`);
   };
 
-
-
-
-
-
   return (
     <div className="container-form">
       <div className="form-container">

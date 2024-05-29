@@ -33,7 +33,7 @@ const TrainerView = () => {
         }
         const data = await response.json();
         setUsers(data);
-        setFilteredUsers(data); // Initialize filteredUsers with the fetched data
+        setFilteredUsers(data);
       } catch (error) {
         setError(error.message);
       } finally {
