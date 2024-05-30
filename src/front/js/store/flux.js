@@ -32,7 +32,8 @@ const getState = ({ getStore, setStore }) => {
 				sessionStorage.removeItem("user_id");
 				sessionStorage.removeItem("userRoutine");
 				sessionStorage.removeItem("user_data");
-				setStore({ token: "", role: null, user_id: null, routine: null });
+				sessionStorage.removeItem("user_image");
+				setStore({ token: "", role: null, user_id: null, routine: null, user_image: null });
 				Swal.fire({
 					title: "Logged out",
 					text: "You have been logged out",
@@ -246,7 +247,7 @@ const getState = ({ getStore, setStore }) => {
 				try {
 					const imgResponse = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
 						headers: {
-							Authorization: `Bearer ${store.token}`
+							Authorization: 'Bearer ' + store.token
 						}
 					});
 
@@ -256,13 +257,14 @@ const getState = ({ getStore, setStore }) => {
 						sessionStorage.setItem("user_image", userImage);
 						setStore({ user_image: userImage });
 					} else {
-						Swal.fire({
+
+						/* Swal.fire({
 							title: "Error",
 							text: "Error fetching user image",
 							type: "error",
 							showConfirmButton: false,
 							timer: 1000,
-						});
+						}) */;
 					}
 				} catch (error) {
 					Swal.fire({
@@ -277,23 +279,44 @@ const getState = ({ getStore, setStore }) => {
 			updateUserImage: async (file) => {
 				const store = getStore();
 				const formData = new FormData();
-				formData.append("file", file);
-				const response = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'multipart/form-data',
-						Authorization: `Bearer ${store.token}`
-					},
-					body: formData,
-				});
-				if (response.ok) {
-					const data = await response.json();
-					sessionStorage.setItem("user_image", data.img);
-					setStore({ user_image: data.img });
-				} else {
+				formData.append("user_profile_picture", file);
+				const method = store.user_image ? 'PUT' : 'POST';
+
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
+						method: method,
+						headers: {
+							Authorization: `Bearer ${store.token}`
+						},
+						body: formData,
+					});
+
+					if (response.ok) {
+						const data = await response.json();
+						console.log(data);
+						sessionStorage.setItem("user_image", data.img);
+						setStore({ user_image: data.img });
+						Swal.fire({
+							title: "Success",
+							text: "Profile picture updated successfully",
+							type: "success",
+							showConfirmButton: false,
+							timer: 1000,
+						});
+					} else {
+						Swal.fire({
+							title: "Error",
+							text: "Error updating user image",
+							type: "error",
+							showConfirmButton: false,
+							timer: 1000,
+						});
+					}
+				} catch (error) {
+					console.error('Error updating user image:', error);
 					Swal.fire({
 						title: "Error",
-						text: "Error updating user image",
+						text: "An error occurred while updating the profile picture",
 						type: "error",
 						showConfirmButton: false,
 						timer: 1000,

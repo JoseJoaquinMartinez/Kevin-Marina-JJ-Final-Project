@@ -1,7 +1,7 @@
 .personalData {
     border: 1px solid var(--secondary-color);
     display: flex;
-    flex-direction: column;
+
     align-items: center;
     justify-content: center;
     width: auto;
@@ -17,6 +17,14 @@
     margin: 10px 0;
     text-align: center;
     color: var(--white-text);
+}
+
+.user-image {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 2%;
 }
 
 .edit-user-btn {

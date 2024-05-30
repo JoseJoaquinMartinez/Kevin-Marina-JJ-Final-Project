@@ -150,7 +150,6 @@ def add_or_update_user_data(id):
     data = request.json
     existing_user_data = User_data.query.filter_by(user_id=id).first()
     if existing_user_data:
-        print ("Existe user Data", existing_user_data)
         existing_user_data.user_name = data.get("user_name", existing_user_data.user_name)
         existing_user_data.user_weight = data.get("user_weight", existing_user_data.user_weight)
         existing_user_data.user_height = data.get("user_height", existing_user_data.user_height)
@@ -182,34 +181,69 @@ def add_or_update_user_data(id):
         serialized_new_user_data = new_user_data.serialize()
 
         return jsonify(serialized_new_user_data), 200
-
-@app.route('/user/<int:user_id>/profile_picture', methods=['POST'])
+    
+    
+@app.route('/user/<int:user_id>/profile_picture', methods=['POST', 'PUT'])
 @jwt_required()
 def upload_user_profile_picture(user_id):
     user_data = User_data.query.filter_by(user_id=user_id).first()
     if not user_data:
         raise APIException('User not found', status_code=404)
 
-    imagen = request.files['user_profile_picture']
-    if imagen:
-        filename = secure_filename(imagen.filename)
-        mimetype = imagen.mimetype
+    imagen = request.files.get('user_profile_picture')
+    if not imagen:
+        raise APIException('No image selected', status_code=400)
 
+    filename = secure_filename(imagen.filename)
+    mimetype = imagen.mimetype
+    img_bytes = imagen.read()
+    img_base64 = base64.b64encode(img_bytes).decode('utf-8')
+
+    if request.method == 'POST':
         
-        img_bytes = imagen.read()
+        existing_image = Image.query.filter_by(user_data_id=user_data.id).first()
+        if existing_image:
+            return jsonify({'error': 'Image already exists, use PUT to update'}), 400
 
         new_image = Image(
-            user_data_id=user_data.id,
+            user_data_id=get_jwt_identity(),
             img=img_bytes,
             name=filename,
             mimetype=mimetype,
         )
         db.session.add(new_image)
         db.session.commit()
-        serialized_image = new_image.serialize()
+
+        serialized_image = {
+            'id': new_image.id,
+            'user_data_id': new_image.user_data_id,
+            'name': new_image.name,
+            'mimetype': new_image.mimetype,
+            'img': img_base64
+        }
         return jsonify(serialized_image), 200
-    else:
-        raise APIException('No image selected', status_code=400)
+
+    elif request.method == 'PUT':
+        existing_image = Image.query.filter_by(user_data_id=get_jwt_identity()).first()
+        if not existing_image:
+            return jsonify({'error': 'Image not found, use POST to create'}), 404
+
+        existing_image.img = img_bytes
+        existing_image.name = filename
+        existing_image.mimetype = mimetype
+        db.session.commit()
+
+        serialized_image = {
+            'id': existing_image.id,
+            'user_data_id': get_jwt_identity(),
+            'name': existing_image.name,
+            'mimetype': existing_image.mimetype,
+            'img': img_base64
+        }
+        return jsonify(serialized_image), 200
+
+    return jsonify({'error': 'Invalid method'}), 405
+
 
 # Get user profile picture
 @app.route('/user/<int:user_id>/profile_picture', methods=['GET'])
