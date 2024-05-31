@@ -242,7 +242,7 @@ const getState = ({ getStore, setStore }) => {
 					});
 				}
 			},
-			fetchUserImage: async () => {
+			/* fetchUserImage: async () => {
 				const store = getStore();
 				try {
 					const imgResponse = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
@@ -258,13 +258,13 @@ const getState = ({ getStore, setStore }) => {
 						setStore({ user_image: userImage });
 					} else {
 
-						/* Swal.fire({
+						Swal.fire({
 							title: "Error",
 							text: "Error fetching user image",
 							type: "error",
 							showConfirmButton: false,
 							timer: 1000,
-						}) */;
+						}) ;
 					}
 				} catch (error) {
 					Swal.fire({
@@ -322,7 +322,7 @@ const getState = ({ getStore, setStore }) => {
 						timer: 1000,
 					});
 				}
-			}
+			} */
 
 		},
 	};

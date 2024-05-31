@@ -93,8 +93,6 @@
 
     .routine-table td::before {
         content: attr(data-label);
-
-        /*  width: calc(50% - 20px); */
         white-space: nowrap;
         font-weight: bold;
     }

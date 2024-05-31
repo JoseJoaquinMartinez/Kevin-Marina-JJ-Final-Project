@@ -21,16 +21,18 @@ const PersonalData = () => {
     }
   }, [store.user_id]);
 
-  useEffect(() => {
+  const handleEditForm = () => {
+    navigate("/user/edit_form");
+  };
+
+  /* useEffect(() => {
     const getUserImage = async () => {
       await actions.fetchUserImage();
     };
     getUserImage();
   }, [store.user_image]);
 
-  const handleEditForm = () => {
-    navigate("/user/edit_form");
-  };
+
 
   useEffect(() => {
     if (!store.user_image) {
@@ -50,7 +52,7 @@ const PersonalData = () => {
       setShowFileInput(false);
       setSelectedFile(null);
     }
-  };
+  }; */
 
   if (!store.user_data) {
     return (
@@ -63,7 +65,7 @@ const PersonalData = () => {
 
   return (
     <div className='personalData'>
-      <img src={image} alt="user-image" className='user-image' />
+      {/* <img src={image} alt="user-image" className='user-image' />
       {!showFileInput && (
         <button onClick={() => setShowFileInput(true)} className="change-profile-pic-btn">Change Profile Picture</button>
       )}
@@ -77,7 +79,7 @@ const PersonalData = () => {
             Upload Picture
           </button>
         </div>
-      )}
+      )} */}
       <div className='user-info'>
         <p className='dataForm'>Full Name: {store.user_data.user_name}</p>
         <p className='dataForm'>Weight: {store.user_data.user_weight}</p>

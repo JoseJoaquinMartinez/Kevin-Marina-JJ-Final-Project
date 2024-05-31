@@ -8,7 +8,7 @@
 }
 
 .highlight {
-    color: #02b532;
+    color: var(--primary-color);
     text-transform: capitalize;
 }
 
@@ -33,9 +33,9 @@
 
 .similar-exercises-scroll-container .exercise-card {
     min-width: 250px;
-    /* Adjust the size according to your design */
+
     margin-right: 20px;
-    /* Spacing between cards */
+
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;

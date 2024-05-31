@@ -9,7 +9,7 @@
 }
 
 .videos-exercise-name {
-    color: #02b532;
+    color: var(--primary-color);
     text-transform: capitalize;
 }
 

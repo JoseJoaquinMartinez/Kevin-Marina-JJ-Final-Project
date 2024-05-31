@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, JSON, LargeBinary
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
 
 class Trainer(db.Model):
@@ -107,7 +108,7 @@ class Image(db.Model):
     img = Column(LargeBinary, nullable=False)  
     name = Column(String(250), nullable=False)
     mimetype = Column(String(250), nullable=False)
-    user_data_id = Column(Integer, ForeignKey(User_data.id), nullable=False)
+    user_data_id = Column(Integer, ForeignKey(User_data.user_id), nullable=False)
     
     def __repr__(self):
         return f'<Image {self.id}>'
