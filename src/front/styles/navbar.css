@@ -6,7 +6,7 @@
   animation: enhancer-navbar linear both;
   animation-timeline: scroll(root);
   animation-range: 0 200px;
-  background-image: var(--gradient-background)
+  background-color: var(--background-color);
 }
 
 @keyframes enhancer-navbar {
@@ -40,6 +40,7 @@
   border: none;
   background-color: transparent;
   width: 3rem;
+  color: var(--white-text);
 }
 
 .navbar-toggler:focus {
@@ -57,7 +58,16 @@
 .a-services:hover,
 .a-about:hover,
 .a-contact:hover {
-  color: var(--secondary-color) !important;
+  color: var(--hover-color) !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.a-home:active,
+.a-services:active,
+.a-about:active,
+.a-contact:active {
+  color: var(--hover-color) !important;
   cursor: pointer;
   user-select: none;
 }

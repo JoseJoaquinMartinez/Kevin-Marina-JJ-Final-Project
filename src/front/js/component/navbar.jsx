@@ -76,7 +76,7 @@ export const Navbar = () => {
               </Link>
             )}
             <li className="nav-item">
-              <a onClick={scrollToFooter} className="nav-link a-contact anchor">
+              <a onClick={() => navigate('/contact')} className="nav-link a-contact anchor">
                 CONTACT
               </a>
             </li>
