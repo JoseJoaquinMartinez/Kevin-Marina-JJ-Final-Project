@@ -1,7 +1,7 @@
 .login-label {
   display: block;
   margin-bottom: 10px;
-  color: var(--white-text);
+  color: var(--background-color);
 }
 
 .login-input,
@@ -11,26 +11,39 @@
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
+  border: 1px solid var(--primary-color);
 
 }
 
+.login-input {
+  background-color: var(--white-text);
+  color: var(--background-color);
+}
 
 .login-modal-title {
   color: var(--primary-color);
+  margin-bottom: 20px;
 }
 
 .login-submit-button,
 .login-close-button {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
+  background-color: var(--background-color);
+  color: var(--white-text);
+  font-weight: 700;
   border: none;
   cursor: pointer;
 }
 
 .login-submit-button:hover,
 .login-close-button:hover {
-  background-color: var(--secondary-color);
-  color: var(--white-text);
+  background-color: var(--primary-color);
+  color: var(--background-color);
+}
+
+.login-submit-button:active,
+.login-close-button:active {
+  background-color: var(--hover-button-background-color);
+  color: var(--background-color);
 }
 
 /* Login Modal opener*/
