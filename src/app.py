@@ -23,11 +23,7 @@ static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
-
-# Agregar configuración para la expiración del token
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
-
+app.config['JWT_SECRET_KEY'] = 'your_secret_key_here'
 jwt = JWTManager(app)
 
 # database configuration
@@ -138,7 +134,6 @@ def create_new_user():
     access_token = create_access_token(identity=new_user_id, additional_claims={"role": new_user.role})
 
     return jsonify({'access_token': access_token}), 200
-
 # Delete user
 @app.route('/delete_user/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
@@ -239,16 +234,14 @@ def upload_user_profile_picture(user_id):
             'user_data_id': new_image.user_data_id,
             'name': new_image.name,
             'mimetype': new_image.mimetype,
-            'img': img_base64,
+            'img': img_base64
         }
-
-        return jsonify(serialized_image), 201
+        return jsonify(serialized_image), 200
 
     elif request.method == 'PUT':
-        
-        existing_image = Image.query.filter_by(user_data_id=user_data.id).first()
+        existing_image = Image.query.filter_by(user_data_id=get_jwt_identity()).first()
         if not existing_image:
-            return jsonify({'error': 'Image not found, use POST to upload'}), 404
+            return jsonify({'error': 'Image not found, use POST to create'}), 404
 
         existing_image.img = img_bytes
         existing_image.name = filename
@@ -257,194 +250,308 @@ def upload_user_profile_picture(user_id):
 
         serialized_image = {
             'id': existing_image.id,
-            'user_data_id': existing_image.user_data_id,
+            'user_data_id': get_jwt_identity(),
             'name': existing_image.name,
             'mimetype': existing_image.mimetype,
-            'img': img_base64,
+            'img': img_base64
         }
-
         return jsonify(serialized_image), 200
 
+    return jsonify({'error': 'Invalid method'}), 405
 
-#Trainer Endpoints
-@app.route('/trainer_data/<int:trainer_id>')
+
+# Get user profile picture
+@app.route('/user/<int:user_id>/profile_picture', methods=['GET'])
 @jwt_required()
-def get_trainer_data(trainer_id):
-    trainer = Trainer.query.get(trainer_id)
+def get_user_profile_picture(user_id):
+    user_profile_image = Image.query.filter_by(user_data_id=user_id).first()
+    if not user_profile_image:
+        raise APIException('User profile image not found', status_code=404)
+
+    image_data = {
+        'id': user_profile_image.id,
+        'img': base64.b64encode(user_profile_image.img).decode('utf-8'),
+        'name': user_profile_image.name,
+        'mimetype': user_profile_image.mimetype
+    }
+    return jsonify(image_data), 200
+
+# Trainer Endpoints
+@app.route('/trainer', methods=['POST'])
+def create_new_trainer():
+    data = request.json
+    check_if_email_already_exists = Trainer.query.filter_by(email=data["email"]).first()
+    if check_if_email_already_exists:
+        raise APIException('Email already exists', status_code=400)
     
-    if trainer:
-        trainer_data = Trainer_data.query.filter_by(trainer_id=trainer_id).first()
-        serialized_trainer_data = trainer_data.serialize()
-
-        return jsonify(serialized_trainer_data), 200
-    else:
-        raise APIException('Trainer data not found', status_code=404)
-        
-
-@app.route('/trainer_data/<int:id>', methods=['POST', 'PATCH'])
-@jwt_required()
-def add_or_update_trainer_data(id):
-    data = request.json
-    existing_trainer_data = Trainer_data.query.filter_by(trainer_id=id).first()
-    if existing_trainer_data:
-        existing_trainer_data.trainer_name = data.get("trainer_name", existing_trainer_data.trainer_name)
-        existing_trainer_data.trainer_speciality = data.get("trainer_speciality", existing_trainer_data.trainer_speciality)
-        existing_trainer_data.trainer_experience = data.get("trainer_experience", existing_trainer_data.trainer_experience)
-        existing_trainer_data.trainer_certificates = data.get("trainer_certificates", existing_trainer_data.trainer_certificates)
-        db.session.commit()
-        
-        updated_trainer_data = Trainer_data.query.filter_by(trainer_id=id).first()
-        serialized_trainer_data = updated_trainer_data.serialize()
-
-        return jsonify(serialized_trainer_data), 200
-    else:
-       
-        new_trainer_data = Trainer_data(
-            trainer_name=data.get("trainer_name"),
-            trainer_speciality=data.get("trainer_speciality"),
-            trainer_experience=data.get("trainer_experience"),
-            trainer_certificates=data.get("trainer_certificates"),
-            trainer_id=get_jwt_identity(),
-        )
-
-        db.session.add(new_trainer_data)
-        db.session.commit()
-
-        serialized_new_trainer_data = new_trainer_data.serialize()
-
-        return jsonify(serialized_new_trainer_data), 200
-
-# Rutinas
-@app.route('/routines', methods=['POST'])
-def create_routine():
-    data = request.json
-    new_routine = Routines(
-        user_id=data["user_id"],
-        trainer_id=data["trainer_id"],
-        routine_name=data["routine_name"],
-        routine_description=data["routine_description"],
-        routine_level=data["routine_level"],
+    new_trainer = Trainer( 
+        email=data["email"],
+        password=data["password"],
+        role="trainer",
     )
-    db.session.add(new_routine)
+
+    db.session.add(new_trainer)
     db.session.commit()
 
-    serialized_routine = new_routine.serialize()
+    new_trainer_id = new_trainer.id
 
-    return jsonify(serialized_routine), 200
+    access_token = create_access_token(identity=new_trainer_id, additional_claims={"role": new_trainer.role})
 
+    return jsonify({'access_token': access_token}), 200
 
-@app.route('/routines/<int:routine_id>', methods=['GET'])
-def get_routine(routine_id):
-    routine = Routines.query.get(routine_id)
-
-    if not routine:
-        raise APIException('Routine not found', status_code=404)
-
-    serialized_routine = routine.serialize()
-
-    return jsonify(serialized_routine), 200
-
-
-@app.route('/routines/<int:routine_id>', methods=['PUT'])
-def update_routine(routine_id):
+@app.route('/trainer/<int:id>', methods=['POST'])
+@jwt_required()
+def post_trainer_data(id):
     data = request.json
-    routine = Routines.query.get(routine_id)
 
-    if not routine:
-        raise APIException('Routine not found', status_code=404)
+    new_trainer_data = Trainer_data(
+        trainer_name=data.get("trainer_name"),
+        profile_picture= "",
+        trainer_id=id,  
+    )
 
-    routine.user_id = data.get("user_id", routine.user_id)
-    routine.trainer_id = data.get("trainer_id", routine.trainer_id)
-    routine.routine_name = data.get("routine_name", routine.routine_name)
-    routine.routine_description = data.get("routine_description", routine.routine_description)
-    routine.routine_level = data.get("routine_level", routine.routine_level)
+    db.session.add(new_trainer_data)
+    db.session.commit()
+
+    serialized_new_trainer_data = new_trainer_data.serialize()
+
+    return jsonify(serialized_new_trainer_data), 200
+
+
+
+@app.route('/trainer/<int:id>')
+@jwt_required()
+def get_trainer_users(id):
+    trainer = Trainer_data.query.filter_by(trainer_data_id=id).first()
+    if not trainer:
+        raise APIException('User not found', status_code=404)
+       
+    
+    users = User_data.query.filter_by(trainer_data_id=id)
+    serialized_users = [user.serialize() for user in users]
+    
+    return jsonify(serialized_users), 200
+    
+@app.route('/trainer/<int:trainer_id>/<int:user_id>')
+@jwt_required()
+def get_single_user_from_trainer(trainer_id, user_id):
+    user = User_data.query.filter_by(trainer_id=trainer_id, user_id=user_id).first()
+
+    if not user:
+        raise APIException('Not users associated with this account', status_code=400)
+        
+    serialized_user = user.serialize()
+
+    return jsonify(serialized_user), 200
+
+# Routines endpoints
+#Get users actual rutine
+@app.route('/user/<int:user_id>/actual_routine')
+@jwt_required()
+def get_actual_routine(user_id):
+    user_routine = Routines.query.filter_by(user_data_id=user_id).first()
+    if user_routine:
+        app.logger.info(f'User routine found for user_id: {user_id}')
+        return jsonify(user_routine.serialize())
+    else:
+        app.logger.warning(f'No user routine found for user_id: {user_id}')
+        raise APIException('No user routine found', status_code=404)
+        
+
+#Get the particular user's Historical 
+@app.route('/user/<int:user_id>/routine_history')
+@jwt_required()
+def get_routine_history(user_id):
+
+    user_routine = Routines.query.filter_by(user_data_id=user_id).first()
+
+    if user_routine:
+        user_history = user_routine.historical
+        return jsonify({"historical": user_history})
+    else:
+        raise APIException("User's historical not found", status_code=404)
+       
+    
+#Allows the Trainer to set the rutine to the user
+@app.route('/trainer/<int:user_id>/set_routine', methods=['POST'])
+@jwt_required()
+def set_routine_with_exercises(user_id):
+    data = request.json
+    
+    user = User.query.get(user_id)
+    if not user:
+        raise APIException('User not found', status_code=404)
+        
+    user_data = User_data.query.filter_by(user_id=user.id).first()
+    if not user_data:
+        raise APIException('User data not found', status_code=404)
+
+    routine_data = data.get("routine")
+    if not routine_data:
+        raise APIException('Routine data missing', status_code=400)
+
+    user_routine = Routines.query.filter_by(user_data_id=user_data.id).first()
+    if not user_routine:
+        new_routine = Routines(
+            user_data_id=user_data.id,
+            trainer_data_id=data["trainer_data_id"],
+            actual_routine=routine_data,
+            historical=[routine_data]
+        )
+        db.session.add(new_routine)
+    else:
+        user_routine.actual_routine = routine_data
+        user_routine.historical.append(routine_data)
 
     db.session.commit()
 
-    serialized_routine = routine.serialize()
-
-    return jsonify(serialized_routine), 200
+    return jsonify({'message': 'Routine added with exercises'}), 201
 
 
-@app.route('/routines/<int:routine_id>', methods=['DELETE'])
-def delete_routine(routine_id):
-    routine = Routines.query.get(routine_id)
+# Exercise Endpoints
+# Get all exercises
+@app.route('/exercises', methods=['GET'])
+@jwt_required()
+def get_all_exercises():
+    exercises = Exercise.query.all()
+    serialized_exercises = [exercise.serialize() for exercise in exercises]
+    return jsonify(serialized_exercises), 200
 
-    if not routine:
-        raise APIException('Routine not found', status_code=404)
+# Get exercise by ID
+@app.route('/exercises/<int:exercise_id>', methods=['GET'])
+@jwt_required()
+def get_exercise(exercise_id):
 
-    db.session.delete(routine)
-    db.session.commit()
+    exercise = Exercise.query.get(exercise_id)
 
-    return jsonify({'message': f'Routine {routine_id} deleted'}), 200
+    if not exercise:
+        raise APIException('Exercise not found', status_code=404)
+        
 
+    serialized_exercise = exercise.serialize()
 
-# Ejercicios
+    return jsonify(serialized_exercise), 200
+
+# Create a new exercise
 @app.route('/exercises', methods=['POST'])
+@jwt_required()
 def create_exercise():
     data = request.json
+
     new_exercise = Exercise(
-        routine_id=data["routine_id"],
         exercise_name=data["exercise_name"],
-        exercise_description=data["exercise_description"],
-        exercise_repetitions=data["exercise_repetitions"],
-        exercise_series=data["exercise_series"],
-        exercise_rest=data["exercise_rest"],
+        exercise_type=data["exercise_type"],
+        exercise_weight=data.get("exercise_weight"),
+        user_data_id=data.get("user_data_id"),
+        trainer_data_id=data.get("trainer_data_id")
     )
+
     db.session.add(new_exercise)
     db.session.commit()
 
-    serialized_exercise = new_exercise.serialize()
+    serialized_new_exercise = new_exercise.serialize()
+    return jsonify(serialized_new_exercise), 201
 
-    return jsonify(serialized_exercise), 200
-
-
-@app.route('/exercises/<int:exercise_id>', methods=['GET'])
-def get_exercise(exercise_id):
-    exercise = Exercise.query.get(exercise_id)
-
-    if not exercise:
-        raise APIException('Exercise not found', status_code=404)
-
-    serialized_exercise = exercise.serialize()
-
-    return jsonify(serialized_exercise), 200
-
-
-@app.route('/exercises/<int:exercise_id>', methods=['PUT'])
+# Update an existing exercise
+@app.route('/exercises/<int:exercise_id>', methods=['PATCH'])
+@jwt_required()
 def update_exercise(exercise_id):
     data = request.json
+
     exercise = Exercise.query.get(exercise_id)
 
     if not exercise:
         raise APIException('Exercise not found', status_code=404)
-
-    exercise.routine_id = data.get("routine_id", exercise.routine_id)
+        
+    
     exercise.exercise_name = data.get("exercise_name", exercise.exercise_name)
-    exercise.exercise_description = data.get("exercise_description", exercise.exercise_description)
-    exercise.exercise_repetitions = data.get("exercise_repetitions", exercise.exercise_repetitions)
-    exercise.exercise_series = data.get("exercise_series", exercise.exercise_series)
-    exercise.exercise_rest = data.get("exercise_rest", exercise.exercise_rest)
+    exercise.exercise_type = data.get("exercise_type", exercise.exercise_type)
+    exercise.exercise_weight = data.get("exercise_weight", exercise.exercise_weight)
+    exercise.user_data_id = data.get("user_data_id", exercise.user_data_id)
+    exercise.trainer_data_id = data.get("trainer_data_id", exercise.trainer_data_id)
 
     db.session.commit()
 
-    serialized_exercise = exercise.serialize()
+    serialized_updated_exercise = exercise.serialize()
 
-    return jsonify(serialized_exercise), 200
+    return jsonify(serialized_updated_exercise), 200
 
-
+# Delete an exercise
 @app.route('/exercises/<int:exercise_id>', methods=['DELETE'])
+@jwt_required()
 def delete_exercise(exercise_id):
     exercise = Exercise.query.get(exercise_id)
 
     if not exercise:
         raise APIException('Exercise not found', status_code=404)
-
+        
+    
     db.session.delete(exercise)
     db.session.commit()
+    
+    return jsonify({'message': 'Exercise deleted'}), 200
 
-    return jsonify({'message': f'Exercise {exercise_id} deleted'}), 200
+
+#Forgot Password endpoint
+def generate_password_reset_token(email):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    return serializer.dumps(email, salt='password-reset-salt')
+
+def confirm_token(token, expiration=3600):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    try:
+        email = serializer.loads(
+            token,
+            salt='password-reset-salt',
+            max_age=expiration
+        )
+    except:
+        return False
+    return email
+
+@app.route('/reset_password', methods=['POST'])
+def reset_password_request():
+    data = request.json
+    email = data.get('email')
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"message": "Email not found"}), 404
+
+    token = generate_password_reset_token(email)
+    reset_url = url_for('reset_password', token=token, _external=True)
+
+    msg = Message(
+        'Password Reset Request',
+        recipients=[email],
+        body=f'Your password reset link is: {reset_url}',
+        sender=app.config['MAIL_DEFAULT_SENDER'] 
+    )
+    mail.send(msg)
+
+    return jsonify({"message": "Password reset email has been sent."}), 200
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    try:
+        email = confirm_token(token)
+    except:
+        return jsonify({"message": "Invalid or expired token"}), 400
+
+    if request.method == 'POST':
+        data = request.json
+        new_password = data.get('password')
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.password = new_password
+            db.session.commit()
+            return jsonify({"message": "Password has been reset successfully"}), 200
+        return jsonify({"message": "User not found"}), 404
+
+    return jsonify({"message": "Provide a new password"}), 200
 
 
 if __name__ == '__main__':
-    app.run()
+    PORT = int(os.environ.get('PORT', 3001))
+    app.run(host='0.0.0.0', port=PORT, debug=True)
