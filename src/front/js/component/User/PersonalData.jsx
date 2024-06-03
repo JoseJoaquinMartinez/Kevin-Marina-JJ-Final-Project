@@ -81,11 +81,12 @@ const PersonalData = () => {
         </div>
       )} */}
       <div className='user-info'>
-        <p className='dataForm'>Full Name: {store.user_data.user_name}</p>
-        <p className='dataForm'>Weight: {store.user_data.user_weight}</p>
-        <p className='dataForm'>Illness: {store.user_data.user_illness}</p>
-        <p className='dataForm'>Height: {store.user_data.user_height}</p>
-        <p className='dataForm'>Objectives: {store.user_data.user_objetives}</p>
+        <h2 className='user-info-title'>Personal Information</h2>
+        <p className='dataForm'><span className='green-text dataForm-title'>Full Name:</span> {store.user_data.user_name}</p>
+        <p className='dataForm'><span className='green-text dataForm-title'>Weight:</span> {store.user_data.user_weight}</p>
+        <p className='dataForm'><span className='green-text dataForm-title'>Illness:</span> {store.user_data.user_illness}</p>
+        <p className='dataForm'><span className='green-text dataForm-title'>Height:</span> {store.user_data.user_height}</p>
+        <p className='dataForm'><span className='green-text dataForm-title'>Objectives:</span> {store.user_data.user_objetives}</p>
       </div>
       <button onClick={handleEditForm} className="edit-user-btn">Edit User Info</button>
     </div>
