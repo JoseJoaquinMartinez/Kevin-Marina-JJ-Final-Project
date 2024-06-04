@@ -10,6 +10,7 @@
     border-radius: 5%;
     background-image: var(--white-text);
     color: var(--background-color);
+
 }
 
 
@@ -18,29 +19,34 @@
     width: 100%;
     overflow-x: auto;
 
+
 }
 
 .routine-loader-title {
     border: 1px solid var(--primary-color);
     font-size: 1.5rem;
     text-align: center;
+
 }
 
 .routine-table {
     width: 100%;
+    font-weight: 700;
 
 }
 
 .routine-table th,
 .routine-table td {
-    border: 1px solid var(--background-color);
+    border: 1px solid var(--primary-color);
     padding: 10px;
     text-align: center;
-
+    font-weight: 700;
 }
 
 .routine-table th {
-    background-color: var(--white-text);
+    background-color: var(--background-color);
+    color: var(--white-text);
+    font-weight: 700;
 }
 
 .routine-title {

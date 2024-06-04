@@ -8,6 +8,7 @@
 .exercises-title {
   align-self: center;
   margin-bottom: 46px;
+  color: var(--background-color);
 }
 
 .exercises-result-container {
