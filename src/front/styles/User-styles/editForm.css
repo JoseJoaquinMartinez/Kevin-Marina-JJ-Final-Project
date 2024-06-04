@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     margin-top: 100px;
 
 }
@@ -19,6 +20,11 @@
     text-align: center;
     border-radius: 5%;
     margin-bottom: 50px;
+}
+
+.form-title {
+    color: var(--background-color);
+
 }
 
 .form-label {
@@ -42,11 +48,16 @@
 }
 
 .form-button {
+
     background-color: var(--background-color);
     color: var(--white-text);
     font-weight: 700;
     border: none;
     cursor: pointer;
+}
+
+.close-btn {
+    margin-top: 10px;
 }
 
 .form-button:hover {
