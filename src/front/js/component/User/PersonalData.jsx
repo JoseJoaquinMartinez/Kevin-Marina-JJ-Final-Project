@@ -81,7 +81,7 @@ const PersonalData = () => {
         </div>
       )} */}
       <div className='user-info'>
-        <h2 className='user-info-title'>Personal Information</h2>
+        <h2 className='user-info-title'>Personal <span className='green-text'>Information</span> </h2>
         <p className='dataForm'><span className='green-text dataForm-title'>Full Name:</span> {store.user_data.user_name}</p>
         <p className='dataForm'><span className='green-text dataForm-title'>Weight:</span> {store.user_data.user_weight}</p>
         <p className='dataForm'><span className='green-text dataForm-title'>Illness:</span> {store.user_data.user_illness}</p>

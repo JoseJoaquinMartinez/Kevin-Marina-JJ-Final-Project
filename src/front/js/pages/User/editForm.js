@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Context } from "../../store/appContext";
 import { useNavigate } from 'react-router-dom';
 
+import "../../../styles/User-styles/editForm.css";
+
 export const EditForm = () => {
   const { store, actions } = useContext(Context);
   const navigate = useNavigate();
@@ -37,20 +39,22 @@ export const EditForm = () => {
 
   return (
     <div className="container-form">
+      <h2 className='form-title'>Edit User <span className='green-text'>Information</span></h2>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <label>
+          <label className='form-label'>
             Full Name:
             <input
               type="text"
               name="user_name"
               value={formData.user_name}
               onChange={handleChange}
+              className='form-input'
               required
             />
           </label>
           <br />
-          <label>
+          <label className='form-label'>
             Height (cm):
             <input
               type="number"
@@ -58,11 +62,12 @@ export const EditForm = () => {
               value={formData.user_height}
               onChange={handleChange}
               placeholder="000"
+              className='form-input'
               required
             />
           </label>
           <br />
-          <label>
+          <label className='form-label'>
             Weight (kg):
             <input
               type="number"
@@ -71,28 +76,31 @@ export const EditForm = () => {
               onChange={handleChange}
               pattern="\d+(\.\d{1,2})?"
               placeholder="00.00"
+              className='form-input'
               required
             />
           </label>
           <br />
-          <label>
+          <label className='form-label'>
             Illness:
             <input
               type="text"
               name="user_illness"
               value={formData.user_illness}
               onChange={handleChange}
+              className='form-input'
               required
             />
           </label>
           <br />
-          <label>
+          <label className='form-label'>
             Objectives:
             <input
               type="text"
               name="user_objetives"
               value={formData.user_objetives}
               onChange={handleChange}
+              className='form-input'
             />
           </label>
           <br />
