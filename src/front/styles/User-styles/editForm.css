@@ -48,11 +48,17 @@
 }
 
 .form-button {
+
     background-color: var(--background-color);
     color: var(--white-text);
     font-weight: 700;
     border: none;
     cursor: pointer;
+}
+
+.close-btn {
+    width: 82%;
+    margin-top: 10px;
 }
 
 .form-button:hover {
