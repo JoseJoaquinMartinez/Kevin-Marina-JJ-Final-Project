@@ -5,6 +5,7 @@
 
 .similar-exercises-heading {
     margin-bottom: 20px;
+    color: var(--background-color);
 }
 
 .highlight {
