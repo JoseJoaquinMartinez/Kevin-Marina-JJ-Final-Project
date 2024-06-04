@@ -105,8 +105,9 @@ export const EditForm = () => {
           </label>
           <br />
           <button type="submit" className='form-button'>Confirm</button>
+          <button className='form-button close-btn' onClick={() => navigate(`/user/${store.user_id}`)}>Return to User Page</button>
         </form>
-        <button className='form-button close-btn' onClick={() => navigate(`/user/${store.user_id}`)}>Return to User Page</button>
+
       </div>
     </div>
   );

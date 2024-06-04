@@ -75,10 +75,10 @@ const TrainerView = () => {
 
   return (
     <section className="userCard">
-      <h1>Clients</h1>
+      <h1 className='user-title'>Clients</h1>
       {loading && <Loader />}
       {error && <p>Error: {error}</p>}
-      <h2 className="user-search-title">Search user</h2>
+      <h2 className="user-search-title">Search <span className='green-text'>Clients</span></h2>
       <div className="input-container">
         <input
           className="search-input"
@@ -89,7 +89,7 @@ const TrainerView = () => {
         />
         <button className="search-btn" onClick={handleSearchClick}>
           Search
-        </button><button className="search-btn" onClick={clearSearch}>
+        </button><button className="search-btn clear-btn" onClick={clearSearch}>
           Clear Search
         </button>
       </div>
@@ -97,12 +97,12 @@ const TrainerView = () => {
         {!loading && currentUsers.length > 0 ? (
           currentUsers.map(user => (
             <div key={user.id} index={user.id} className="user-card">
-              <h2>{user.user_name}</h2>
-              <p>Height: {user.user_height} cm</p>
-              <p>Weight: {user.user_weight} kg</p>
-              <p>Illness: {user.user_illness}</p>
-              <p>Objectives: {user.user_objetives}</p>
-              <button onClick={() => handleDetailClick(user.user_id)}>Details</button>
+              <h2 className='user-name'>{user.user_name}</h2>
+              <p className='user-data'><span className='green-text'>Height:</span> {user.user_height} cm</p>
+              <p className='user-data'><span className='green-text'>Weight:</span> {user.user_weight} kg</p>
+              <p className='user-data'><span className='green-text'>Illness:</span> {user.user_illness}</p>
+              <p className='user-data'><span className='green-text'>Objectives:</span> {user.user_objetives}</p>
+              <button className='more-info-btn' onClick={() => handleDetailClick(user.user_id)}>Details</button>
             </div>
           ))
         ) : (
