@@ -46,6 +46,7 @@ const TrainerView = () => {
 
   const handleDetailClick = (userId) => {
     navigate(`/trainer/${store.user_id}/user/${userId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSearchClick = () => {

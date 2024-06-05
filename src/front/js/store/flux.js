@@ -131,6 +131,26 @@ const getState = ({ getStore, setStore }) => {
 					});
 				}
 			},
+			deleteUser: async (userId) => {
+				const store = getStore();
+
+				const response = await fetch(`${process.env.BACKEND_URL}/delete_user/${userId}`, {
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: "Bearer " + store.token
+					},
+				});
+				if (response.ok) {
+					Swal.fire({
+						title: "Success",
+						text: "User deleted",
+						type: "success",
+						showConfirmButton: false,
+						timer: 1000,
+					});
+				}
+			},
 			fetchUserData: async () => {
 				const store = getStore();
 				const userDataFromSession = sessionStorage.getItem("user_data");
