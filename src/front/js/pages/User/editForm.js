@@ -13,7 +13,8 @@ export const EditForm = () => {
     user_height: '',
     user_weight: '',
     user_illness: '',
-    user_objetives: ''
+    user_objetives: '',
+    user_age: ''
   });
 
   useEffect(() => {
@@ -48,6 +49,18 @@ export const EditForm = () => {
               type="text"
               name="user_name"
               value={formData.user_name}
+              onChange={handleChange}
+              className='form-input'
+              required
+            />
+          </label>
+          <br />
+          <label className='form-label'>
+            Age:
+            <input
+              type="number"
+              name="user_height"
+              value={formData.user_age}
               onChange={handleChange}
               className='form-input'
               required

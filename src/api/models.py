@@ -83,6 +83,7 @@ class User_data(db.Model):
             "user_height": self.user_height,
             "user_illness": self.user_illness,
             "user_objetives": self.user_objetives,
+            "user_age": self.user_age,
             "trainer_data_id": self.trainer_data_id
         }
 
