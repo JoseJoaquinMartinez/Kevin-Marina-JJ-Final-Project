@@ -31,7 +31,7 @@ export const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top">
-      <div className="container-fluid justify-content-between align-items-center">
+      <div className="container-fluid justify-content-between align-items-center d-flex">
         <Link to="/" className="navbar-brand d-flex align-items-center me-0 me-lg-3">
           <img src={Logo} alt="logo" className="logo-svg" />
         </Link>
