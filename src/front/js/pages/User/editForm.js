@@ -35,6 +35,7 @@ export const EditForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await actions.patchUserData(formData);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     navigate(`/user/${store.user_id}`);
   };
 
@@ -59,7 +60,7 @@ export const EditForm = () => {
             Age:
             <input
               type="number"
-              name="user_height"
+              name="user_age"
               value={formData.user_age}
               onChange={handleChange}
               className='form-input'
@@ -118,7 +119,11 @@ export const EditForm = () => {
           </label>
           <br />
           <button type="submit" className='form-button'>Confirm</button>
-          <button className='form-button close-btn' onClick={() => navigate(`/user/${store.user_id}`)}>Return to User Page</button>
+          <button className='form-button close-btn' onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            navigate(`/user/${store.user_id}`);
+
+          }}>Return to User Page</button>
         </form>
 
       </div>

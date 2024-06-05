@@ -47,8 +47,8 @@ const TrainerUserDetail = () => {
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#0B3D91',
+            cancelButtonColor: '#8BC34A',
             confirmButtonText: 'Yes, delete it!'
         });
 
