@@ -1,7 +1,7 @@
 .navbar {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 10px;
   animation: enhancer-navbar linear both;
   animation-timeline: scroll(root);
@@ -130,8 +130,19 @@
     text-align: center;
   }
 
-  .nav-link {
+  .nav-link,
+  .logout-btn,
+  .login-component {
     width: 100%;
     padding: 10px 0;
+    text-align: center;
+  }
+
+  .logout-btn {
+    margin-bottom: 10px;
+  }
+
+  .login-component {
+    margin: 10px 0;
   }
 }
