@@ -13,7 +13,7 @@ const About = () => {
       <div className="about-content">
         <img
           className="about-img"
-          src="https://asset.cloudinary.com/dpnlm16li/173ada9bb484cf5713150021675b50fd"
+          src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693517/about-img_xgb5mv.png"
           alt="woman streching about img"
         />
         <div className="about-text">

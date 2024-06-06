@@ -16,7 +16,7 @@ const Services = () => {
       <div className="services-container">
         <div className="left-services">
           <img
-            src="https://asset.cloudinary.com/dpnlm16li/3a5c6db63ca2f5288c9c919f5bb4d855"
+            src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693518/services-left_tdy6ox.png"
             alt="basic fitnes section image"
             onClick={handleClick}
             className="services-img left-img" />
@@ -33,7 +33,7 @@ const Services = () => {
         </div>
         <div className="right-services">
           <img
-            src="https://asset.cloudinary.com/dpnlm16li/80f604d88e945f783de89a3583316637"
+            src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693518/services-right_rrrndo.png"
             alt="Body building section image"
             onClick={handleClick}
             className="services-img right-img" />
