@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+/* const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; */
 module.exports = {
   entry: [
     './src/front/js/index.js'
@@ -44,6 +44,6 @@ module.exports = {
       template: 'template.html'
     }),
     new Dotenv({ safe: true, systemvars: true }),
-    new BundleAnalyzerPlugin()
+    /* new BundleAnalyzerPlugin() */
   ]
 };
