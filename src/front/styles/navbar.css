@@ -182,7 +182,9 @@
 
   .nav-link,
   .logout-btn,
-  .login-component {
+  .login-component,
+  .navbar-signup-btn,
+  .navbar-login-btn {
     width: 100%;
     padding: 10px 0;
     text-align: center;
@@ -192,7 +194,23 @@
     margin-bottom: 10px;
   }
 
-  .login-component {
+  .login-component,
+  .navbar-signup-btn,
+  .navbar-login-btn {
     margin: 10px 0;
+  }
+
+  .d-lg-none .d-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .d-lg-none .navbar-signup-btn,
+  .d-lg-none .navbar-login-btn {
+    width: auto;
+    margin: 5px 0;
+    padding: 10px 20px;
   }
 }

@@ -22,8 +22,9 @@ const UserRoutine = () => {
     if (!routine) {
         return (
             <div className='routine-loader-title'>
-                <h4 >No routine just yet.</h4>
-                <Loader />
+                <h3 className='routine-title'>Routine</h3>
+                <h4 className='rout'>No routine just yet. Your trainer will give you one as soon as possible.</h4>
+
             </div>
         );
     }
