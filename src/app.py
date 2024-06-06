@@ -10,11 +10,11 @@ from api.commands import setup_commands
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from datetime import timedelta
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
-import base64
-from flask_mail import Mail, Message
+""" from werkzeug.utils import secure_filename
+import base64 """
+""" from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
-from dotenv import load_dotenv
+from dotenv import load_dotenv """
 
 load_dotenv()
 
@@ -39,7 +39,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
-app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+""" app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
 app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT'))
 app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS').lower() in ['true', '1', 'yes']
 app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL').lower() in ['true', '1', 'yes']
@@ -48,7 +48,7 @@ app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
 app.config['SECRET_KEY'] = os.getenv('MAIL_SECRET_KEY')
 
-mail = Mail(app)
+mail = Mail(app) """
 # add the admin
 setup_admin(app)
 setup_commands(app)
@@ -198,7 +198,7 @@ def add_or_update_user_data(id):
         return jsonify(serialized_new_user_data), 200
     
     
-@app.route('/user/<int:user_id>/profile_picture', methods=['POST', 'PUT'])
+""" @app.route('/user/<int:user_id>/profile_picture', methods=['POST', 'PUT'])
 @jwt_required()
 def upload_user_profile_picture(user_id):
     user_data = User_data.query.filter_by(user_id=user_id).first()
@@ -274,7 +274,7 @@ def get_user_profile_picture(user_id):
         'name': user_profile_image.name,
         'mimetype': user_profile_image.mimetype
     }
-    return jsonify(image_data), 200
+    return jsonify(image_data), 200 """
 
 # Trainer Endpoints
 @app.route('/trainer', methods=['POST'])
@@ -493,7 +493,7 @@ def delete_exercise(exercise_id):
 
 
 #Forgot Password endpoint
-def generate_password_reset_token(email):
+""" def generate_password_reset_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt='password-reset-salt')
 
@@ -549,7 +549,7 @@ def reset_password(token):
             return jsonify({"message": "Password has been reset successfully"}), 200
         return jsonify({"message": "User not found"}), 404
 
-    return jsonify({"message": "Provide a new password"}), 200
+    return jsonify({"message": "Provide a new password"}), 200 """
 
 
 if __name__ == '__main__':
