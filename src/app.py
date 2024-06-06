@@ -16,7 +16,7 @@ import base64 """
 from itsdangerous import URLSafeTimedSerializer
 from dotenv import load_dotenv """
 
-load_dotenv()
+""" load_dotenv() """
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
