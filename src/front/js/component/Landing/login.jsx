@@ -3,7 +3,7 @@ import { Context } from "../../store/appContext";
 import "./../../../styles/Landing-styles/login.css";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const Login = ({ className }) => {
   const [showModal, setShowModal] = useState(false);
   const [user, setUser] = useState({});
   const { store, actions } = useContext(Context);
@@ -43,7 +43,7 @@ export const Login = () => {
 
   return (
     <div className="login">
-      <button className="login-button" onClick={() => setShowModal(true)}>
+      <button className={`login-button ${className}`} onClick={() => setShowModal(true)}>
         Login
       </button>
 

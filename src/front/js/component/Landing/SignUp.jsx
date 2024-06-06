@@ -4,7 +4,7 @@ import { Context } from "../../store/appContext";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
-export const SignUp = () => {
+export const SignUp = ({ className }) => {
 	const [showModal, setShowModal] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -50,7 +50,7 @@ export const SignUp = () => {
 	return (
 		<div>
 			<div>
-				<button className="button-sign-up" onClick={handleShow}>
+				<button className={`button-sign-up ${className}`} onClick={handleShow}>
 					Sign Up
 				</button>
 

@@ -57,6 +57,7 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
   return (
     <div id="exercises" className="exercises-container">
       <h3 className="exercises-title">Showing <span className="green-text">Results</span></h3>
+      <h4 className="exercises-title">Click on an exercise to see <span className="green-text">more details</span></h4>
       <div className="exercises-result-container">
         {currentExercises.length > 0 ? (
           currentExercises.map((exercise, index) => (

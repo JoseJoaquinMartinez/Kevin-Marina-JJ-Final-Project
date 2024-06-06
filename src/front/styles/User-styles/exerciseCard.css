@@ -15,7 +15,8 @@
   transition: transform 0.3s;
   border: 1px solid var(--primary-color);
   min-width: 300px;
-  min-height: 450px;
+  height: 450px;
+
 }
 
 .exercise-card-image {
@@ -52,6 +53,29 @@
   margin-top: 10px;
   font-size: 16px;
   text-align: center;
+}
+
+.card-button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--primary-color);
+  background-color: var(--background-color);
+  color: var(--white-text);
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.card-button:hover {
+  background-color: var(--hover-button-background-color);
+  color: var(--background-color);
+}
+
+.card-button:active {
+  background-color: var(--primary-color);
+  color: var(--background-color);
 }
 
 @media (max-width: 768px) {

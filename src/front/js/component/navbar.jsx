@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import Logo from "./../../img/logo.png";
 import { Login } from "./Landing/login.jsx";
+import { SignUp } from "./Landing/SignUp.jsx";
 import "./../../styles/navbar.css";
 import { CiMenuBurger } from "react-icons/ci";
 
@@ -22,10 +23,10 @@ export const Navbar = () => {
     }
   };
 
-  const scrollToFooter = () => {
-    const footer = document.getElementById("footer");
-    if (footer) {
-      footer.scrollIntoView({ behavior: "smooth" });
+  const handleNavLinkClick = () => {
+    const navbarCollapse = document.getElementById("navbarSupportedContent");
+    if (navbarCollapse.classList.contains("show")) {
+      navbarCollapse.classList.remove("show");
     }
   };
 
@@ -48,15 +49,15 @@ export const Navbar = () => {
           <CiMenuBurger style={{ width: '2rem', height: '2rem' }} />
         </button>
 
-        <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+        <div className="collapse navbar-collapse  links-container" id="navbarSupportedContent">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to="/" className="nav-link a-home anchor" onClick={() => scrollToSection("home")}>
+              <Link to="/" className="nav-link a-home anchor" onClick={() => { scrollToSection("home"); handleNavLinkClick(); }}>
                 HOME
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/#about" className="nav-link a-about anchor" onClick={() => scrollToSection("about")}>
+              <Link to="/#about" className="nav-link a-about anchor" onClick={() => { scrollToSection("about"); handleNavLinkClick(); }}>
                 ABOUT
               </Link>
             </li>
@@ -71,12 +72,12 @@ export const Navbar = () => {
                 </Link>
               ) : null
             ) : (
-              <Link to="/#services" className="nav-link a-services anchor" onClick={() => scrollToSection("services")}>
+              <Link to="/#services" className="nav-link a-services anchor" onClick={() => { scrollToSection("services"); handleNavLinkClick(); }}>
                 SERVICES
               </Link>
             )}
             <li className="nav-item">
-              <a onClick={() => navigate('/contact')} className="nav-link a-contact anchor">
+              <a onClick={() => { navigate('/contact'); handleNavLinkClick(); }} className="nav-link a-contact anchor">
                 CONTACT
               </a>
             </li>
@@ -89,7 +90,10 @@ export const Navbar = () => {
                   Log Out
                 </button>
               ) : (
-                <Login className="btn login-component" />
+                <div className="d-flex">
+                  <SignUp className="navbar-signup-btn" />
+                  <Login className="navbar-login-btn" />
+                </div>
               )}
             </li>
           </ul>
@@ -104,7 +108,10 @@ export const Navbar = () => {
               Log Out
             </button>
           ) : (
-            <Login className="btn login-component" />
+            <div className="d-flex">
+              <SignUp className="navbar-signup-btn" />
+              <Login className="navbar-login-btn" />
+            </div>
           )}
         </div>
       </div>

@@ -1,7 +1,7 @@
 .navbar {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 10px;
   animation: enhancer-navbar linear both;
   animation-timeline: scroll(root);
@@ -23,6 +23,28 @@
   animation: none;
 }
 
+.links-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+
+/* .navbar-nav {
+  display: flex;
+
+  width: 60%;
+}
+
+.nav-item {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.5rem 1rem;
+} */
 .logo-svg {
   width: 5rem;
   height: 4rem;
@@ -72,27 +94,55 @@
   user-select: none;
 }
 
-.login-component {
+.navbar-signup-btn,
+.navbar-login-btn {
+  width: auto;
+  height: auto;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  font-weight: 700;
+  padding: 10px 20px;
+  border: 1px solid var(--border-button-color);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.navbar-signup-btn {
+  margin-right: 5px;
+}
+
+.navbar-signup-btn:hover,
+.navbar-login-btn:hover {
+  background-color: var(--hover-button-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--primary-color);
+}
+
+
+/* .login-component {
   background-color: var(--primary-color);
   color: var(--white-text);
   padding: 10px 20px;
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  margin-left: 5px;
   transition: background-color 0.3s ease;
 }
+
+
 
 .login-component:hover {
   background-color: var(--white-text);
   color: var(--primary-color);
 
-}
+} */
 
 .logout-btn {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: 5px;
   background-color: var(--primary-color);
   color: var(--background-color);
   font-weight: 700;
