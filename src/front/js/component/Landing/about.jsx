@@ -1,6 +1,6 @@
 import React from "react";
 import "../../../styles/Landing-styles/about.css";
-import AboutImage from "../../../img/about-img.png";
+/* import AboutImage from "../../../img/about-img.png"; */
 
 const About = () => {
   const isMobile = window.innerWidth < 768;
@@ -13,7 +13,7 @@ const About = () => {
       <div className="about-content">
         <img
           className="about-img"
-          src={AboutImage}
+          src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693517/about-img_xgb5mv.png"
           alt="woman streching about img"
         />
         <div className="about-text">

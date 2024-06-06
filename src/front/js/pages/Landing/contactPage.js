@@ -1,9 +1,9 @@
 import React from 'react';
 import { CiLinkedin } from "react-icons/ci";
 import { FaGithub } from "react-icons/fa";
-import MarinaPhoto from '../../../img/Marina.jpeg';
+/* import MarinaPhoto from '../../../img/Marina.jpeg';
 import KevinPhoto from '../../../img/Kevin.jpeg';
-import JoseJoaquinPhoto from '../../../img/JJ.jpeg';
+import JoseJoaquinPhoto from '../../../img/JJ.jpeg'; */
 import '../../../styles/Landing-styles/contactPage.css';
 
 const ContactPage = () => {
@@ -14,7 +14,7 @@ const ContactPage = () => {
             <div className='contact-container'>
                 <section className="contact-section">
                     <div className="contact-content">
-                        <img src={MarinaPhoto} alt="Marina" className="contact-img" />
+                        <img src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693517/Marina_wsgxng.jpg" alt="Marina" className="contact-img" />
                         <div className="contact-text">
                             <h2>Marina</h2>
                             <div className="contact-links">
@@ -33,7 +33,7 @@ const ContactPage = () => {
 
                 <section className="contact-section">
                     <div className="contact-content">
-                        <img src={KevinPhoto} alt="Kevin" className="contact-img" />
+                        <img src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693518/Kevin_w5vnok.jpg" alt="Kevin" className="contact-img" />
                         <div className="contact-text">
                             <h2>Kevin</h2>
                             <div className="contact-links">
@@ -52,7 +52,7 @@ const ContactPage = () => {
 
                 <section className="contact-section">
                     <div className="contact-content">
-                        <img src={JoseJoaquinPhoto} alt="Jose Joaquin" className="contact-img" />
+                        <img src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693518/JJ_illrnv.jpg" alt="Jose Joaquin" className="contact-img" />
                         <div className="contact-text">
                             <h2>Jose Joaquin</h2>
                             <div className="contact-links">

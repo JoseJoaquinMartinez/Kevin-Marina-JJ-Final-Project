@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import ServicesLeft from "../../../img/services-left.png";
-import ServicesRight from "../../../img/services-right.png";
+/* import ServicesLeft from "../../../img/services-left.png";
+import ServicesRight from "../../../img/services-right.png"; */
 import "../../../styles/Landing-styles/services.css";
 
 const Services = () => {
@@ -16,7 +16,7 @@ const Services = () => {
       <div className="services-container">
         <div className="left-services">
           <img
-            src={ServicesLeft}
+            src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693518/services-left_tdy6ox.png"
             alt="basic fitnes section image"
             onClick={handleClick}
             className="services-img left-img" />
@@ -33,7 +33,7 @@ const Services = () => {
         </div>
         <div className="right-services">
           <img
-            src={ServicesRight}
+            src="https://res.cloudinary.com/dpnlm16li/image/upload/v1717693518/services-right_rrrndo.png"
             alt="Body building section image"
             onClick={handleClick}
             className="services-img right-img" />
