@@ -17,7 +17,7 @@ const Services = () => {
 
             <section className="service-section">
                 <div className="service-content">
-                    /* <img src={PersonalTrainingImg} alt="Personal Training" className="service-img" /> */
+                    <img src="https://asset.cloudinary.com/dpnlm16li/3a53fabc104141b561f3373204b0839a" alt="Personal Training" className="service-img" /> 
                     <div className="service-text">
                         <h2><span className='green-text'>Personal</span> Training</h2>
                         <p>Our certified personal trainers will work with you one-on-one to create a customized workout plan tailored to your specific needs and goals.</p>
@@ -32,7 +32,7 @@ const Services = () => {
 
             <section className="service-section">
                 <div className="service-content reverse">
-                    /* <img src={GroupFitnessImg} alt="Group Fitness Classes" className="service-img" /> */
+                    <img src="https://asset.cloudinary.com/dpnlm16li/da11d97d13d360fe47a40530b638e488" alt="Group Fitness Classes" className="service-img" /> 
                     <div className="service-text">
                         <h2><span className='green-text'>Group</span> Fitness Classes</h2>
                         <p>Join our group fitness classes for a fun and motivating workout experience. We offer a variety of classes for all fitness levels.</p>
@@ -48,7 +48,7 @@ const Services = () => {
 
             <section className="service-section">
                 <div className="service-content">
-                    /* <img src={NutritionCoachingImg} alt="Nutrition Coaching" className="service-img" /> */
+                    <img src="https://asset.cloudinary.com/dpnlm16li/b6629c8058c9fd82da1318b758fe94da" alt="Nutrition Coaching" className="service-img" />
                     <div className="service-text">
                         <h2><span className='green-text'>Nutrition</span> Coaching</h2>
                         <p>Our nutrition coaches will help you create a healthy eating plan that supports your fitness goals and overall well-being.</p>
@@ -63,7 +63,7 @@ const Services = () => {
 
             <section className="service-section">
                 <div className="service-content reverse">
-                    /* <img src={OnlineProgramsImg} alt="Online Programs" className="service-img" /> */
+                    <img src="https://asset.cloudinary.com/dpnlm16li/db147c0dee9ba67ccda73a36ea3ababd" alt="Online Programs" className="service-img" /> 
                     <div className="service-text">
                         <h2><span className='green-text'>Online</span> Programs</h2>
                         <p>Access our fitness and nutrition programs from the comfort of your home. Our online programs are designed to be flexible and convenient.</p>
