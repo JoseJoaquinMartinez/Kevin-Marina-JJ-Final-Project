@@ -60,7 +60,7 @@ class User(db.Model):
 class User_data(db.Model):
     id = Column(Integer, primary_key=True)
     user_name = Column(String(100), nullable=False)
-    user_id = Column(Integer, ForeignKey(User.id), unique=True, nullable=False)
+    user_id = Column(Integer, ForeignKey(User.id))
     user_weight = Column(Integer, nullable=True)
     user_height = Column(Integer, nullable=True)
     user_illness = Column(String(250), nullable=False)
