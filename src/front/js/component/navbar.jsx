@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import Logo from "./../../img/logo.png";
 import { Login } from "./Landing/login.jsx";
+import { SignUp } from "./Landing/SignUp.jsx";
 import "./../../styles/navbar.css";
 import { CiMenuBurger } from "react-icons/ci";
 
@@ -19,13 +20,6 @@ export const Navbar = () => {
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const scrollToFooter = () => {
-    const footer = document.getElementById("footer");
-    if (footer) {
-      footer.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -89,7 +83,10 @@ export const Navbar = () => {
                   Log Out
                 </button>
               ) : (
-                <Login className="btn login-component" />
+                <div className="d-flex">
+                  <SignUp className="navbar-signup-btn" />
+                  <Login className="navbar-login-btn" />
+                </div>
               )}
             </li>
           </ul>
@@ -104,7 +101,10 @@ export const Navbar = () => {
               Log Out
             </button>
           ) : (
-            <Login className="btn login-component" />
+            <div className="d-flex">
+              <SignUp className="navbar-signup-btn" />
+              <Login className="navbar-login-btn" />
+            </div>
           )}
         </div>
       </div>
