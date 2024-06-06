@@ -23,6 +23,13 @@ export const Navbar = () => {
     }
   };
 
+  const handleNavLinkClick = () => {
+    const navbarCollapse = document.getElementById("navbarSupportedContent");
+    if (navbarCollapse.classList.contains("show")) {
+      navbarCollapse.classList.remove("show");
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg fixed-top">
       <div className="container-fluid justify-content-between align-items-center d-flex">
@@ -42,15 +49,15 @@ export const Navbar = () => {
           <CiMenuBurger style={{ width: '2rem', height: '2rem' }} />
         </button>
 
-        <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+        <div className="collapse navbar-collapse  links-container" id="navbarSupportedContent">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to="/" className="nav-link a-home anchor" onClick={() => scrollToSection("home")}>
+              <Link to="/" className="nav-link a-home anchor" onClick={() => { scrollToSection("home"); handleNavLinkClick(); }}>
                 HOME
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/#about" className="nav-link a-about anchor" onClick={() => scrollToSection("about")}>
+              <Link to="/#about" className="nav-link a-about anchor" onClick={() => { scrollToSection("about"); handleNavLinkClick(); }}>
                 ABOUT
               </Link>
             </li>
@@ -65,12 +72,12 @@ export const Navbar = () => {
                 </Link>
               ) : null
             ) : (
-              <Link to="/#services" className="nav-link a-services anchor" onClick={() => scrollToSection("services")}>
+              <Link to="/#services" className="nav-link a-services anchor" onClick={() => { scrollToSection("services"); handleNavLinkClick(); }}>
                 SERVICES
               </Link>
             )}
             <li className="nav-item">
-              <a onClick={() => navigate('/contact')} className="nav-link a-contact anchor">
+              <a onClick={() => { navigate('/contact'); handleNavLinkClick(); }} className="nav-link a-contact anchor">
                 CONTACT
               </a>
             </li>

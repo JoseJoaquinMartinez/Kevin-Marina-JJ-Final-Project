@@ -1,7 +1,7 @@
 .navbar {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 10px;
   animation: enhancer-navbar linear both;
   animation-timeline: scroll(root);
@@ -23,6 +23,28 @@
   animation: none;
 }
 
+.links-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+
+/* .navbar-nav {
+  display: flex;
+
+  width: 60%;
+}
+
+.nav-item {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.5rem 1rem;
+} */
 .logo-svg {
   width: 5rem;
   height: 4rem;
@@ -86,6 +108,10 @@
   transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
 
+.navbar-signup-btn {
+  margin-right: 5px;
+}
+
 .navbar-signup-btn:hover,
 .navbar-login-btn:hover {
   background-color: var(--hover-button-background-color);
@@ -94,7 +120,7 @@
 }
 
 
-.login-component {
+/* .login-component {
   background-color: var(--primary-color);
   color: var(--white-text);
   padding: 10px 20px;
@@ -111,30 +137,28 @@
   background-color: var(--white-text);
   color: var(--primary-color);
 
-}
+} */
 
 .logout-btn {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: 5px;
-  border: 1px solid var(--primary-color);
-  background-color: var(--background-color);
-  color: var(--white-text);
+  background-color: var(--primary-color);
+  color: var(--background-color);
   font-weight: 700;
-  border: none;
+  padding: 10px 20px;
+  border: 1px solid var(--border-button-color);
   cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
 
 .logout-btn:hover {
-  background-color: var(--primary-color);
-  color: var(--background-color);
+  background-color: var(--hover-button-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--primary-color);
 }
 
-.logout-btn:active {
-  background-color: var(--hover-button-background-color);
-  color: var(--background-color);
-}
 
 
 @media (max-width: 992px) {
