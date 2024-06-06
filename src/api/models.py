@@ -60,7 +60,7 @@ class User(db.Model):
 class User_data(db.Model):
     id = Column(Integer, primary_key=True)
     user_name = Column(String(100), nullable=False)
-    user_id = Column(Integer, ForeignKey(User.id))
+    user_id = Column(Integer, ForeignKey(User.id), unique=True, nullable=False)
     user_weight = Column(Integer, nullable=True)
     user_height = Column(Integer, nullable=True)
     user_illness = Column(String(250), nullable=False)
@@ -109,7 +109,7 @@ class Image(db.Model):
     img = Column(LargeBinary, nullable=False)  
     name = Column(String(250), nullable=False)
     mimetype = Column(String(250), nullable=False)
-    user_data_id = Column(Integer, ForeignKey(User_data.user_id), nullable=False)
+    user_data_id = Column(Integer, ForeignKey(User_data.user_id), nullable=False, unique=True,)
     
     def __repr__(self):
         return f'<Image {self.id}>'
@@ -127,8 +127,8 @@ class Exercise(db.Model):
     exercise_name = Column(String(100), nullable=False, unique=True)
     exercise_type = Column(String(50), nullable=False)
     exercise_weight = Column(Integer, nullable=True)
-    user_data_id = Column(Integer, ForeignKey(User_data.id))
-    trainer_data_id = Column(Integer, ForeignKey(Trainer_data.trainer_data_id))
+    user_data_id = Column(Integer, ForeignKey(User_data.id), unique=True,)
+    trainer_data_id = Column(Integer, ForeignKey(Trainer_data.trainer_data_id), unique=True)
     
     def __repr__(self):
         return f'<Exercise {self.id}>'

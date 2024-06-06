@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 6ef03f90ceab
+Revision ID: 9245e6c432d5
 Revises: 
-Create Date: 2024-05-31 14:39:16.422893
+Create Date: 2024-06-06 18:43:31.553044
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6ef03f90ceab'
+revision = '9245e6c432d5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,7 +45,7 @@ def upgrade():
     op.create_table('user_data',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_name', sa.String(length=100), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('user_weight', sa.Integer(), nullable=True),
     sa.Column('user_height', sa.Integer(), nullable=True),
     sa.Column('user_illness', sa.String(length=250), nullable=False),
@@ -54,7 +54,8 @@ def upgrade():
     sa.Column('trainer_data_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['trainer_data_id'], ['trainer_data.trainer_data_id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('user_id')
     )
     op.create_table('exercise',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -66,7 +67,9 @@ def upgrade():
     sa.ForeignKeyConstraint(['trainer_data_id'], ['trainer_data.trainer_data_id'], ),
     sa.ForeignKeyConstraint(['user_data_id'], ['user_data.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('exercise_name')
+    sa.UniqueConstraint('exercise_name'),
+    sa.UniqueConstraint('trainer_data_id'),
+    sa.UniqueConstraint('user_data_id')
     )
     op.create_table('image',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -74,8 +77,9 @@ def upgrade():
     sa.Column('name', sa.String(length=250), nullable=False),
     sa.Column('mimetype', sa.String(length=250), nullable=False),
     sa.Column('user_data_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['user_data_id'], ['user_data.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.ForeignKeyConstraint(['user_data_id'], ['user_data.user_id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('user_data_id')
     )
     op.create_table('routines',
     sa.Column('id', sa.Integer(), nullable=False),
