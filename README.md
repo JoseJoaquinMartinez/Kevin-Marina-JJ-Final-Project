@@ -3,10 +3,10 @@
 Gym web application
 
 ## Description
-
-This project is a web application designed to streamline gym management tasks. It provides features for managing memberships, tracking workouts, and handling various administrative activities. The application has a user-friendly interface built with React.js and a robust backend powered by Flask.
-
-Users can register, schedule private training sessions with trainers, view personalized workout routines, search for exercises, and access detailed exercise views with instructional YouTube videos and related exercises targeting the same muscle groups.
+[ES]
+La aplicación MKJ Gym permite a los usuarios obtener coaching personalizado y rutinas de entrenamiento personalizadas. Esta aplicación se enfoca en brindar un enfoque individualizado para cada usuario, adaptando los planes de entrenamiento a sus necesidades y objetivos específicos. Los entrenadores personales especializados en MKJ Gym trabajan en estrecha colaboración con los clientes para diseñar y supervisar programas de entrenamiento que aborden los objetivos de salud y bienestar físico de cada individuo, como la pérdida de peso, la mejora del rendimiento deportivo y la mejora general de la condición física
+[EN]
+The MKJ Gym application allows users to get 1 on 1 coaching and personalized training routines. This app focuses on providing an individualized approach for each user, tailoring workout plans to their specific needs and goals. Specialized personal trainers at MKJ Gym work closely with clients to design and oversee training programs that address each individual's health and physical fitness objectives, such as weight loss, improvement of athletic performance, and overall fitness enhancement.
 
 ## Table of Contents
 
