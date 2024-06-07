@@ -1,6 +1,6 @@
-# MKJ-GYM-Final-Project
+# MKJ-GYM
 
-Final project for the 4Geeks Bootcamp by Kevin, Marina, and Jose Joaquin.
+Gym web application
 
 ## Description
 
