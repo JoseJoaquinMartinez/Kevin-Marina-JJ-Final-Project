@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 
 
+
+
 db = SQLAlchemy()
 
 class Trainer(db.Model):
@@ -46,6 +48,8 @@ class User(db.Model):
     password = Column(String(80), nullable=False)
     role = Column(String(10), nullable=False)
     user_data = relationship("User_data", backref="user",cascade="all,delete-orphan", lazy=True)
+
+   
     
     def __repr__(self):
         return f'<User {self.id}>'

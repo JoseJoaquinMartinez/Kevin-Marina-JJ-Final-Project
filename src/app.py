@@ -10,13 +10,13 @@ from api.commands import setup_commands
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from datetime import timedelta
 from flask_cors import CORS
-""" from werkzeug.utils import secure_filename
-import base64 """
-""" from flask_mail import Mail, Message
+from werkzeug.utils import secure_filename
+import base64 
+from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
-from dotenv import load_dotenv """
+from dotenv import load_dotenv 
 
-""" load_dotenv() """
+load_dotenv() 
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
@@ -24,6 +24,7 @@ static_file_dir = os.path.join(os.path.dirname(
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config['JWT_SECRET_KEY'] = 'your_secret_key_here'
+app.config['SECURITY_PASSWORD_SALT']='your_password_salt_here'
 jwt = JWTManager(app)
 
 # database configuration
@@ -39,16 +40,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
-""" app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
-app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT'))
-app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS').lower() in ['true', '1', 'yes']
-app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL').lower() in ['true', '1', 'yes']
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
-app.config['SECRET_KEY'] = os.getenv('MAIL_SECRET_KEY')
 
-mail = Mail(app) """
+
+
+mail = Mail(app) 
 # add the admin
 setup_admin(app)
 setup_commands(app)
@@ -198,7 +199,7 @@ def add_or_update_user_data(id):
         return jsonify(serialized_new_user_data), 200
     
     
-""" @app.route('/user/<int:user_id>/profile_picture', methods=['POST', 'PUT'])
+@app.route('/user/<int:user_id>/profile_picture', methods=['POST', 'PUT'])
 @jwt_required()
 def upload_user_profile_picture(user_id):
     user_data = User_data.query.filter_by(user_id=user_id).first()
@@ -274,7 +275,7 @@ def get_user_profile_picture(user_id):
         'name': user_profile_image.name,
         'mimetype': user_profile_image.mimetype
     }
-    return jsonify(image_data), 200 """
+    return jsonify(image_data), 200
 
 # Trainer Endpoints
 @app.route('/trainer', methods=['POST'])
@@ -493,63 +494,51 @@ def delete_exercise(exercise_id):
 
 
 #Forgot Password endpoint
-""" def generate_password_reset_token(email):
-    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    return serializer.dumps(email, salt='password-reset-salt')
-
-def confirm_token(token, expiration=3600):
-    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    try:
-        email = serializer.loads(
-            token,
-            salt='password-reset-salt',
-            max_age=expiration
-        )
-    except:
-        return False
-    return email
-
-@app.route('/reset_password', methods=['POST'])
-def reset_password_request():
+@app.route('/forgot_password', methods=['POST'])
+def forgot_password():
     data = request.json
-    email = data.get('email')
-
-    user = User.query.filter_by(email=email).first()
+    
+    user = User.query.filter_by(email=data).first()
     if not user:
-        return jsonify({"message": "Email not found"}), 404
+        return jsonify({'message': 'User not found'}), 404
 
-    token = generate_password_reset_token(email)
-    reset_url = url_for('reset_password', token=token, _external=True)
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    token = serializer.dumps({'user_id': user.id}, salt=app.config['SECURITY_PASSWORD_SALT'])
 
-    msg = Message(
-        'Password Reset Request',
-        recipients=[email],
-        body=f'Your password reset link is: {reset_url}',
-        sender=app.config['MAIL_DEFAULT_SENDER'] 
-    )
+    link = url_for('reset_password', token=token, _external=True)
+
+    msg = Message('Password Reset Request', recipients=[data])
+    msg.body = f'''Your link to reset your password is {link}. If you did not request a password reset, please ignore this email.'''
     mail.send(msg)
 
-    return jsonify({"message": "Password reset email has been sent."}), 200
+    return jsonify({'message': 'Password reset link has been sent'}), 200
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+@app.route('/reset_password/<token>', methods=['POST'])
 def reset_password(token):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
-        email = confirm_token(token)
+        data = serializer.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=3600)
     except:
-        return jsonify({"message": "Invalid or expired token"}), 400
+        return jsonify({'message': 'Token is invalid or expired'}), 400
 
-    if request.method == 'POST':
-        data = request.json
-        new_password = data.get('password')
+    user = User.query.get(data['user_id'])
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
-        user = User.query.filter_by(email=email).first()
-        if user:
-            user.password = new_password
-            db.session.commit()
-            return jsonify({"message": "Password has been reset successfully"}), 200
-        return jsonify({"message": "User not found"}), 404
+    new_password = request.json.get('password')
+    if not new_password:
+        return jsonify({'message': 'Password is required'}), 400
 
-    return jsonify({"message": "Provide a new password"}), 200 """
+    user.password = new_password 
+    db.session.commit()
+
+    return jsonify({'message': 'Password has been reset'}), 200
+
+
+
+
+
+    
 
 
 if __name__ == '__main__':

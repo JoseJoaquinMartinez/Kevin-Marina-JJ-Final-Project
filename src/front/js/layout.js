@@ -18,6 +18,8 @@ import ExerciseDetail from "./pages/User/exerciseDetail.js";
 import ProtectedRoute from "./component/protectedRoute.jsx";
 import TrainerUserDetail from "./pages/Trainer/trainerUserDetail.js";
 import Services from "./pages/Landing/servicesPage.js";
+import ForgotPassword from "./component/Landing/ForgotPassword.jsx"
+import ResetPassword from "./component/Landing/ResetPassword.jsx"
 import ContactPage from "./pages/Landing/contactPage.js";
 
 const Layout = () => {
@@ -36,6 +38,8 @@ const Layout = () => {
                         <Route path="/" element={<Landing />} />
                         <Route path="/services" element={<Services />} />
                         <Route path="/contact" element={<ContactPage />} />
+                        <Route path="/forgotPassword" element={<ForgotPassword />} />
+                        <Route path="/reset_password/:token" element={<ResetPassword />} />
 
                         <Route element={userToken ? <UserForm /> : <Navigate to="/" />} path="/user-form" />
 

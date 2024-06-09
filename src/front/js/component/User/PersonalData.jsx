@@ -20,19 +20,12 @@ const PersonalData = () => {
       actions.fetchUserData();
     }
   }, [store.user_id]);
-
-  const handleEditForm = () => {
-    navigate("/user/edit_form");
-  };
-
-  /* useEffect(() => {
+  useEffect(() => {
     const getUserImage = async () => {
       await actions.fetchUserImage();
     };
     getUserImage();
-  }, [store.user_image]);
-
-
+  }, []);
 
   useEffect(() => {
     if (!store.user_image) {
@@ -41,6 +34,12 @@ const PersonalData = () => {
       setImage(store.user_image);
     }
   }, [store.user_image]);
+
+
+
+  const handleEditForm = () => {
+    navigate("/user/edit_form");
+  };
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -52,7 +51,7 @@ const PersonalData = () => {
       setShowFileInput(false);
       setSelectedFile(null);
     }
-  }; */
+  };
 
   if (!store.user_data) {
     return (
@@ -65,31 +64,35 @@ const PersonalData = () => {
 
   return (
     <div className='personalData'>
-      {/* <img src={image} alt="user-image" className='user-image' />
-      {!showFileInput && (
-        <button onClick={() => setShowFileInput(true)} className="change-profile-pic-btn">Change Profile Picture</button>
-      )}
-      {showFileInput && (
-        <div className="file-input-container">
-          <input type="file" onChange={handleFileChange} />
-          <button
-            onClick={handleUploadImage}
-            disabled={!selectedFile}
-            className="upload-img-btn">
-            Upload Picture
-          </button>
+      <section className='user-image-container'>
+        <img src={image} alt="user-image" className='user-image' />
+        {!showFileInput && (
+          <button onClick={() => setShowFileInput(true)} className="change-profile-pic-btn">Change Profile Picture</button>
+        )}
+        {showFileInput && (
+          <div className="file-input-container">
+            <input type="file" onChange={handleFileChange} className='picture-input' />
+            <button
+              onClick={handleUploadImage}
+              disabled={!selectedFile}
+              className="upload-img-btn">
+              Upload Picture
+            </button>
+          </div>
+        )}
+      </section>
+      <section className='user-info-container'>
+        <div className='user-info'>
+          <h2 className='user-info-title'>Personal <span className='green-text'>Information</span> </h2>
+          <p className='dataForm'><span className='green-text dataForm-title'>Full Name:</span> {store.user_data.user_name}</p>
+          <p className='dataForm'><span className='green-text dataForm-title'>Age:</span> {store.user_data.user_age}</p>
+          <p className='dataForm'><span className='green-text dataForm-title'>Weight:</span> {store.user_data.user_weight}</p>
+          <p className='dataForm'><span className='green-text dataForm-title'>Illness:</span> {store.user_data.user_illness}</p>
+          <p className='dataForm'><span className='green-text dataForm-title'>Height:</span> {store.user_data.user_height}</p>
+          <p className='dataForm'><span className='green-text dataForm-title'>Objectives:</span> {store.user_data.user_objetives}</p>
         </div>
-      )} */}
-      <div className='user-info'>
-        <h2 className='user-info-title'>Personal <span className='green-text'>Information</span> </h2>
-        <p className='dataForm'><span className='green-text dataForm-title'>Full Name:</span> {store.user_data.user_name}</p>
-        <p className='dataForm'><span className='green-text dataForm-title'>Age:</span> {store.user_data.user_age}</p>
-        <p className='dataForm'><span className='green-text dataForm-title'>Weight:</span> {store.user_data.user_weight}</p>
-        <p className='dataForm'><span className='green-text dataForm-title'>Illness:</span> {store.user_data.user_illness}</p>
-        <p className='dataForm'><span className='green-text dataForm-title'>Height:</span> {store.user_data.user_height}</p>
-        <p className='dataForm'><span className='green-text dataForm-title'>Objectives:</span> {store.user_data.user_objetives}</p>
-      </div>
-      <button onClick={handleEditForm} className="edit-user-btn">Edit User Info</button>
+        <button onClick={handleEditForm} className="edit-user-btn">Edit User Info</button>
+      </section>
     </div>
   );
 };
