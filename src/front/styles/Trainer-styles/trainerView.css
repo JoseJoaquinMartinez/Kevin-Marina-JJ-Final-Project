@@ -20,6 +20,26 @@
     color: var(--background-color);
 }
 
+.user-profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 5%;
+    object-fit: cover;
+    max-height: 100px;
+
+}
+
+.user-card {
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 10px;
+    min-width: 250px;
+    max-width: 250px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 16px;
+    transition: box-shadow 0.3s;
+}
+
 .input-container {
     width: 100%;
     align-self: center;
@@ -64,16 +84,7 @@
 
 
 
-.user-card {
-    border: 1px solid var(--primary-color);
-    border-radius: 8px;
-    padding: 10px;
-    min-width: 250px;
-    max-width: 250px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 16px;
-    transition: box-shadow 0.3s;
-}
+
 
 .user-card:hover {
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);

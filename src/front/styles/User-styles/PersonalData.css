@@ -1,5 +1,5 @@
 .personalData {
-    border: 1px solid var(--primary-color);
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,8 +54,16 @@
     height: 200px;
     width: 200px;
     object-fit: cover;
+    margin-bottom: 5px;
     object-position: center;
     border-radius: 2%;
+}
+
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .edit-user-btn,

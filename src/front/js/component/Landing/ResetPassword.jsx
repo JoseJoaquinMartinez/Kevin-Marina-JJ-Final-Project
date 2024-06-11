@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
+import '../../../styles/Landing-styles/resetPassword.css';
+
 const ResetPassword = () => {
     const { token } = useParams();
     const [password, setPassword] = useState('');
@@ -24,7 +26,7 @@ const ResetPassword = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ password }),
+            body: JSON.stringify(password),
         });
 
         if (response.ok) {

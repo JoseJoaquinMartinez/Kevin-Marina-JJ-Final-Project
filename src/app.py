@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, url_for, send_from_directory, abort, Response
+from flask import Flask, request, jsonify, url_for, send_from_directory, abort, Response, redirect, render_template
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
@@ -46,6 +46,7 @@ app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+app.config['FRONTEND_URL'] = os.getenv('FRONTEND_URL')
 
 
 
@@ -493,11 +494,10 @@ def delete_exercise(exercise_id):
     return jsonify({'message': 'Exercise deleted'}), 200
 
 
-#Forgot Password endpoint
+# Forgot Password endpoint
 @app.route('/forgot_password', methods=['POST'])
 def forgot_password():
-    data = request.json
-    
+    data = request.json  
     user = User.query.filter_by(email=data).first()
     if not user:
         return jsonify({'message': 'User not found'}), 404
@@ -505,13 +505,15 @@ def forgot_password():
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     token = serializer.dumps({'user_id': user.id}, salt=app.config['SECURITY_PASSWORD_SALT'])
 
-    link = url_for('reset_password', token=token, _external=True)
+    frontend_url = app.config['FRONTEND_URL'] 
+    link = f"{frontend_url}/resetPassword/{token}"
 
     msg = Message('Password Reset Request', recipients=[data])
     msg.body = f'''Your link to reset your password is {link}. If you did not request a password reset, please ignore this email.'''
     mail.send(msg)
 
     return jsonify({'message': 'Password reset link has been sent'}), 200
+
 
 @app.route('/reset_password/<token>', methods=['POST'])
 def reset_password(token):
@@ -533,12 +535,6 @@ def reset_password(token):
     db.session.commit()
 
     return jsonify({'message': 'Password has been reset'}), 200
-
-
-
-
-
-    
 
 
 if __name__ == '__main__':

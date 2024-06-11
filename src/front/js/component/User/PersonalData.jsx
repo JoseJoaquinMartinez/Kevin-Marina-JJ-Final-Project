@@ -14,17 +14,25 @@ const PersonalData = () => {
   const [image, setImage] = useState(null);
   const [showFileInput, setShowFileInput] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!store.user_data) {
-      actions.fetchUserData();
+      async function fetchData() {
+        await actions.fetchUserData();
+        await actions.fetchUserImage();
+        setIsLoading(false);
+
+      }
+      fetchData();
     }
+
   }, [store.user_id]);
+
   useEffect(() => {
-    const getUserImage = async () => {
-      await actions.fetchUserImage();
-    };
-    getUserImage();
+    if (store.user_data && store.user_image) {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -34,7 +42,6 @@ const PersonalData = () => {
       setImage(store.user_image);
     }
   }, [store.user_image]);
-
 
 
   const handleEditForm = () => {
@@ -47,18 +54,64 @@ const PersonalData = () => {
 
   const handleUploadImage = async () => {
     if (selectedFile) {
-      await actions.updateUserImage(selectedFile);
+      const updateUserImage = async (selectedFile) => {
+        const formData = new FormData();
+        formData.append("user_profile_picture", selectedFile);
+        const method = store.user_image ? 'PUT' : 'POST';
+
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
+            method: method,
+            headers: {
+              Authorization: `Bearer ${store.token}`
+            },
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const userImage = `data:${data.mimetype};base64,${data.img}`;
+            actions.setUserImage(userImage);
+            setImage(userImage);
+            Swal.fire({
+              title: "Success",
+              text: "Profile picture updated successfully",
+              type: "success",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          } /* else {
+            Swal.fire({
+              title: "Error",
+              text: "Error updating user image",
+              type: "error",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          } */
+        } catch (error) {
+          console.error('Error updating user image:', error);
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred while updating the profile picture",
+            type: "error",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      };
+      updateUserImage(selectedFile);
       setShowFileInput(false);
       setSelectedFile(null);
     }
   };
 
-  if (!store.user_data) {
+  if (isLoading) {
     return (
-      <>
+      <div className='loader-container'>
         <h4>Loading...</h4>
         <Loader />
-      </>
+      </div>
     );
   }
 
