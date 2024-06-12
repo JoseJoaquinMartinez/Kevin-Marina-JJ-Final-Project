@@ -497,9 +497,8 @@ def delete_exercise(exercise_id):
 # Forgot Password endpoint
 @app.route('/forgot_password', methods=['POST'])
 def forgot_password():
-    data = request.json
-    email = data.get("email")  
-    user = User.query.filter_by(email=email).first()
+    data = request.json 
+    user = User.query.filter_by(email=data).first()
     if not user:
         return jsonify({'message': 'User not found'}), 404
     
