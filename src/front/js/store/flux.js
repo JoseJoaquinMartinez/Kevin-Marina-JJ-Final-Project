@@ -278,13 +278,13 @@ const getState = ({ getStore, setStore }) => {
 						setStore({ user_image: userImage });
 					} else {
 
-						Swal.fire({
+						/* Swal.fire({
 							title: "Error",
 							text: "Error fetching user image",
 							type: "error",
 							showConfirmButton: false,
 							timer: 1000,
-						});
+						}); */
 					}
 				} catch (error) {
 					Swal.fire({

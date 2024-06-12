@@ -8,19 +8,38 @@
     margin-top: 100px;
 }
 
-.personal-trainer-data {
-    border: 1px solid var(--primary-color);
+.user-detail-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    flex-direction: column;
-    width: 300px;
+    width: 100%;
+    max-width: 900px;
     padding: 20px;
     box-sizing: border-box;
     border-radius: 5%;
-    background-image: var(--white-text);
+    background-color: var(--white-text);
     color: var(--background-color);
     margin-bottom: 20px;
+}
+
+.user-image-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.user-info-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.user-detail-profile-image {
+    height: 300px;
 }
 
 .dataForm {
@@ -35,9 +54,8 @@
 }
 
 .delete-user-btn {
-
     padding: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
     border-radius: 5px;
     border: 1px solid var(--primary-color);
     background-color: var(--background-color);
