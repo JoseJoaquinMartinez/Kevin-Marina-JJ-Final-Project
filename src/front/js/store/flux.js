@@ -262,7 +262,7 @@ const getState = ({ getStore, setStore }) => {
 					});
 				}
 			},
-			/* fetchUserImage: async () => {
+			fetchUserImage: async () => {
 				const store = getStore();
 				try {
 					const imgResponse = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
@@ -284,7 +284,7 @@ const getState = ({ getStore, setStore }) => {
 							type: "error",
 							showConfirmButton: false,
 							timer: 1000,
-						}) ;
+						});
 					}
 				} catch (error) {
 					Swal.fire({
@@ -296,53 +296,10 @@ const getState = ({ getStore, setStore }) => {
 					});
 				}
 			},
-			updateUserImage: async (file) => {
-				const store = getStore();
-				const formData = new FormData();
-				formData.append("user_profile_picture", file);
-				const method = store.user_image ? 'PUT' : 'POST';
-
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/user/${store.user_id}/profile_picture`, {
-						method: method,
-						headers: {
-							Authorization: `Bearer ${store.token}`
-						},
-						body: formData,
-					});
-
-					if (response.ok) {
-						const data = await response.json();
-						console.log(data);
-						sessionStorage.setItem("user_image", data.img);
-						setStore({ user_image: data.img });
-						Swal.fire({
-							title: "Success",
-							text: "Profile picture updated successfully",
-							type: "success",
-							showConfirmButton: false,
-							timer: 1000,
-						});
-					} else {
-						Swal.fire({
-							title: "Error",
-							text: "Error updating user image",
-							type: "error",
-							showConfirmButton: false,
-							timer: 1000,
-						});
-					}
-				} catch (error) {
-					console.error('Error updating user image:', error);
-					Swal.fire({
-						title: "Error",
-						text: "An error occurred while updating the profile picture",
-						type: "error",
-						showConfirmButton: false,
-						timer: 1000,
-					});
-				}
-			} */
+			setUserImage: (image) => {
+				sessionStorage.setItem("user_image", image);
+				setStore({ user_image: image });
+			},
 
 		},
 	};

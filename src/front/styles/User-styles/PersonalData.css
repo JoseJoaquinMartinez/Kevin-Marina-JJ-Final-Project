@@ -1,9 +1,8 @@
 .personalData {
-    border: 1px solid var(--primary-color);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     width: auto;
     padding: 20px;
     box-sizing: border-box;
@@ -23,16 +22,53 @@
     font-weight: 700;
 }
 
+.picture-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--white-text);
+    color: var(--background-color);
+}
+
+.user-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+}
+
+.user-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+}
 
 .user-image {
     height: 200px;
     width: 200px;
     object-fit: cover;
+    margin-bottom: 5px;
     object-position: center;
     border-radius: 2%;
 }
 
-.edit-user-btn {
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-user-btn,
+.change-profile-pic-btn,
+.upload-img-btn {
     width: 50%;
     padding: 10px;
     margin-bottom: 10px;
@@ -45,12 +81,41 @@
     cursor: pointer;
 }
 
-.edit-user-btn:hover {
+.edit-user-btn:hover,
+.change-profile-pic-btn:hover,
+.upload-img-btn:hover {
     background-color: var(--primary-color);
     color: var(--background-color);
 }
 
-.edit-user-btn:active {
+.edit-user-btn:active,
+.change-profile-pic-btn:active,
+.upload-img-btn:active {
     background-color: var(--hover-button-background-color);
     color: var(--background-color);
+}
+
+@media screen and (max-width: 768px) {
+    .personalData {
+        flex-direction: column;
+    }
+
+    .user-image-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .user-info-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .user-image {
+        height: 150px;
+        width: 150px;
+    }
 }

@@ -80,7 +80,7 @@ export const Login = ({ className }) => {
                 setData({ email: "", password: "" });
               }}>Close</button>
             </form>
-            {/* <p onClick={() => { setShowModal(false); navigate('/forgotPassword') }}>Forgot your password?</p> */}
+            {/* <a className="forgot-password-link" onClick={() => { setShowModal(false); navigate('/forgotPassword') }}>Forgot your password?</a> */}
           </div>
         </div>
       )}

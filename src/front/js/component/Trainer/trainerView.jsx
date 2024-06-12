@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Context } from "../../store/appContext";
 import ReactPaginate from "react-paginate";
 import Loader from '../User/loader.jsx';
-
+import AvatarDefault from "../../../img/avatar-default.png";
 import "../../../styles/Trainer-styles/trainerView.css";
 
 const TrainerView = () => {
@@ -32,8 +32,26 @@ const TrainerView = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setUsers(data);
-        setFilteredUsers(data);
+
+        const usersWithImages = await Promise.all(data.map(async user => {
+          const imgResponse = await fetch(`${process.env.BACKEND_URL}/user/${user.id}/profile_picture`, {
+            headers: {
+              Authorization: 'Bearer ' + store.token
+            }
+          });
+
+          if (imgResponse.ok) {
+            const imgData = await imgResponse.json();
+            user.profile_image = `data:${imgData.mimetype};base64,${imgData.img}`;
+          } else {
+            user.profile_image = AvatarDefault;
+          }
+
+          return user;
+        }));
+
+        setUsers(usersWithImages);
+        setFilteredUsers(usersWithImages);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -68,6 +86,7 @@ const TrainerView = () => {
     setPageNumber(selected);
     window.scrollTo({ top: 1000, behavior: 'smooth' });
   };
+
   const clearSearch = () => {
     setSearch("");
     setPageNumber(0);
@@ -90,7 +109,8 @@ const TrainerView = () => {
         />
         <button className="search-btn" onClick={handleSearchClick}>
           Search
-        </button><button className="search-btn clear-btn" onClick={clearSearch}>
+        </button>
+        <button className="search-btn clear-btn" onClick={clearSearch}>
           Clear Search
         </button>
       </div>
@@ -98,6 +118,11 @@ const TrainerView = () => {
         {!loading && currentUsers.length > 0 ? (
           currentUsers.map(user => (
             <div key={user.id} index={user.id} className="user-card">
+              <img
+                src={user.profile_image || AvatarDefault}
+                alt={`${user.user_name}'s profile`}
+                className="user-profile-image"
+              />
               <h2 className='user-name'>{user.user_name}</h2>
               <p className='user-data'><span className='green-text'>Height:</span> {user.user_height} cm</p>
               <p className='user-data'><span className='green-text'>Weight:</span> {user.user_weight} kg</p>
@@ -107,9 +132,7 @@ const TrainerView = () => {
             </div>
           ))
         ) : (
-
           <h2>No clients to display.</h2>
-
         )}
       </div>
       <ReactPaginate

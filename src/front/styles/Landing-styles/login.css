@@ -46,6 +46,17 @@
   color: var(--background-color);
 }
 
+.forgot-password-link {
+  color: var(--background-color);
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.forgot-password-link:hover {
+  color: var(--primary-color);
+}
+
 /* Login Modal opener*/
 
 .login-button {
