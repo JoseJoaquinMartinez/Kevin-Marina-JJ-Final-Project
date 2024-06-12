@@ -160,3 +160,4 @@ const TrainerView = () => {
 };
 
 export default TrainerView;
+
