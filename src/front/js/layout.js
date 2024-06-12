@@ -39,7 +39,7 @@ const Layout = () => {
                         <Route path="/services" element={<Services />} />
                         <Route path="/contact" element={<ContactPage />} />
                         <Route path="/forgotPassword" element={<ForgotPassword />} />
-                        <Route path="/resetPassword/:token" element={<ResetPassword />} />
+                        <Route path="/reset_password/:token" element={<ResetPassword />} />
 
                         <Route element={userToken ? <UserForm /> : <Navigate to="/" />} path="/user-form" />
 
