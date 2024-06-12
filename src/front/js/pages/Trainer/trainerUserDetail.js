@@ -3,9 +3,9 @@ import { Context } from "../../store/appContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-
 import Loader from "../../component/User/loader.jsx";
 import TrainerExercise from '../../component/Trainer/trainerExercise.jsx';
+import AvatarDefault from "../../../img/avatar-default.png";
 
 import "../../../styles/Trainer-styles/trainerUserDetails.css";
 
@@ -21,25 +21,49 @@ const TrainerUserDetail = () => {
         user_illness: '',
         user_objetives: ''
     });
+    const [profileImage, setProfileImage] = useState(AvatarDefault);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const getUserData = async () => {
-            const userData = await fetch(`${process.env.BACKEND_URL}/user_data/${userId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + store.token
+            try {
+                const userDataResponse = await fetch(`${process.env.BACKEND_URL}/user_data/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + store.token
+                    }
+                });
+
+                if (!userDataResponse.ok) {
+                    throw new Error('Error fetching user data');
                 }
-            });
-            if (userData.ok) {
-                const data = await userData.json();
-                setFormData(data);
-            } else {
-                Swal.fire({ title: "Error", text: "Error fetching user data", type: "error", showConfirmButton: false, timer: 1000 });
+
+                const userData = await userDataResponse.json();
+                setFormData(userData);
+
+                const imgResponse = await fetch(`${process.env.BACKEND_URL}/user/${userId}/profile_picture`, {
+                    headers: {
+                        Authorization: 'Bearer ' + store.token
+                    }
+                });
+
+                if (imgResponse.ok) {
+                    const imgData = await imgResponse.json();
+                    setProfileImage(`data:${imgData.mimetype};base64,${imgData.img}`);
+                } else {
+                    setProfileImage(AvatarDefault);
+                }
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
             }
         }
+
         getUserData();
-    }, []);
+    }, [userId, store.token]);
 
     const handleDeleteUser = async () => {
         const result = await Swal.fire({
@@ -58,8 +82,7 @@ const TrainerUserDetail = () => {
         }
     }
 
-
-    if (!formData) {
+    if (loading) {
         return (
             <>
                 <h4>Loading...</h4>
@@ -68,22 +91,35 @@ const TrainerUserDetail = () => {
         );
     }
 
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
+
     return (
         <section className="user-detail-view">
-            <div className='personal-trainer-data'>
-                <div className='user-info'>
-                    <p className='dataForm'><span className='green-text dataForm-title'>Full Name:</span> {formData.user_name}</p>
-                    <p className='dataForm'><span className='green-text dataForm-title'>Age:</span> {formData.user_age}</p>
-                    <p className='dataForm'><span className='green-text dataForm-title'>Height:</span> {formData.user_height}</p>
-                    <p className='dataForm'><span className='green-text dataForm-title'>Weight:</span> {formData.user_weight}</p>
-                    <p className='dataForm'><span className='green-text dataForm-title'>Illness:</span> {formData.user_illness}</p>
-                    <p className='dataForm'><span className='green-text dataForm-title'>Objectives:</span> {formData.user_objetives}</p>
-                </div>
-                <button onClick={handleDeleteUser} className="delete-user-btn">Delete User</button>
+            <div className="user-detail-container">
+                <section className="user-image-section">
+                    <img
+                        src={profileImage}
+                        alt={`${formData.user_name}'s profile`}
+                        className="user-detail-profile-image"
+                    />
+                </section>
+                <section className="user-info-section">
+                    <div className='user-info'>
+                        <p className='dataForm'><span className='green-text dataForm-title'>Full Name:</span> {formData.user_name}</p>
+                        <p className='dataForm'><span className='green-text dataForm-title'>Age:</span> {formData.user_age}</p>
+                        <p className='dataForm'><span className='green-text dataForm-title'>Height:</span> {formData.user_height}</p>
+                        <p className='dataForm'><span className='green-text dataForm-title'>Weight:</span> {formData.user_weight}</p>
+                        <p className='dataForm'><span className='green-text dataForm-title'>Illness:</span> {formData.user_illness}</p>
+                        <p className='dataForm'><span className='green-text dataForm-title'>Objectives:</span> {formData.user_objetives}</p>
+                    </div>
+                    <button onClick={handleDeleteUser} className="delete-user-btn">Delete User</button>
+                </section>
             </div>
             <TrainerExercise />
         </section>
     );
 };
 
-export default TrainerUserDetail
+export default TrainerUserDetail;
