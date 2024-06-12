@@ -13,27 +13,26 @@ const ResetPassword = () => {
     const [validToken, setValidToken] = useState(false);
     const navigate = useNavigate();
 
-    /*  useEffect(() => {
-         console.log(token);
-         const verifyToken = async () => {
-             const response = await fetch(`${process.env.BACKEND_URL}/verify_reset_token/${token}`, {
-                 method: 'GET',
-             });
- 
-             if (response.ok) {
-                 setValidToken(true);
-             } else {
-                 Swal.fire({
-                     title: 'Invalid or expired token',
-                     icon: 'error',
-                     showConfirmButton: true,
-                 });
-                 navigate('/');
-             }
-         };
- 
-         verifyToken();
-     }, [token, navigate]); */
+    useEffect(() => {
+        const verifyToken = async () => {
+            const response = await fetch(`${process.env.BACKEND_URL}/verify_reset_token/${token}`, {
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                setValidToken(true);
+            } else {
+                Swal.fire({
+                    title: 'Invalid or expired token',
+                    icon: 'error',
+                    showConfirmButton: true,
+                });
+                navigate('/');
+            }
+        };
+
+        verifyToken();
+    }, [token, navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
