@@ -514,7 +514,7 @@ def forgot_password():
     return jsonify({'message': 'Password reset link has been sent'}), 200
 
 
-@app.route('/reset_password/<token>', methods=['POST'])
+@app.route('/reset_password/<token>', methods=['PATCH'])
 def reset_password(token):
     try:
         decoded_token = decode_token(token)

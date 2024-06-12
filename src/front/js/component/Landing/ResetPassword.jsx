@@ -25,7 +25,7 @@ const ResetPassword = () => {
         }
 
         const response = await fetch(`${process.env.BACKEND_URL}/reset_password/${token}`, {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
