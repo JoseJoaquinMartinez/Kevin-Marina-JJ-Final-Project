@@ -518,7 +518,7 @@ def forgot_password():
 def reset_password(token):
     try:
         decoded_token = decode_token(token)
-        user_id = decoded_token['sub']  
+        user_id = decoded_token['sub']
         user = User.query.get(user_id)
 
         if not user:
@@ -528,9 +528,9 @@ def reset_password(token):
         new_password = data.get('password')
 
         if not new_password:
-            return jsonify({'message': 'Password fields are required'}), 400
+            return jsonify({'message': 'Password field is required'}), 400
 
-        user.password = new_password  
+        user.password = new_password
         db.session.commit()
 
         return jsonify({'message': 'Password reset successfully'}), 200
