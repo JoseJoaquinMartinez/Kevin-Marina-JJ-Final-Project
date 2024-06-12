@@ -10,7 +10,7 @@ const ResetPassword = () => {
     const { token } = useParams();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [validToken, setValidToken] = useState(false);
+    const [validToken, setValidToken] = useState(true);
     const navigate = useNavigate();
 
     /*  useEffect(() => {
