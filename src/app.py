@@ -505,7 +505,7 @@ def forgot_password():
     expire_time = timedelta(hours=1)
     token = create_access_token(identity=user.id, expires_delta=expire_time)
     
-    link = url_for('resetPassword', token=token, _external=True)
+    link = url_for('reset_password', token=token, _external=True)
 
     msg = Message('Password Reset Request', recipients=[data])
     msg.body = f'''Your link to reset your password is {link}. If you did not request a password reset, please ignore this email.'''
