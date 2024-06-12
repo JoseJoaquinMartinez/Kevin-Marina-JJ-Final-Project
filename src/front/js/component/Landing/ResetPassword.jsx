@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Loader from "../User/loader.jsx";
@@ -12,27 +12,6 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [validToken, setValidToken] = useState(true);
     const navigate = useNavigate();
-
-    /*  useEffect(() => {
-         const verifyToken = async () => {
-             const response = await fetch(`${process.env.BACKEND_URL}/verify_reset_token/${token}`, {
-                 method: 'GET',
-             });
- 
-             if (response.ok) {
-                 setValidToken(true);
-             } else {
-                 Swal.fire({
-                     title: 'Invalid or expired token',
-                     icon: 'error',
-                     showConfirmButton: true,
-                 });
-                 navigate('/');
-             }
-         };
- 
-         verifyToken();
-     }, [token, navigate]); */
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -50,7 +29,7 @@ const ResetPassword = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(password),
+            body: JSON.stringify({ password }),
         });
 
         if (response.ok) {
