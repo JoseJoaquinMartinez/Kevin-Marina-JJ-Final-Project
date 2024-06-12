@@ -497,8 +497,9 @@ def delete_exercise(exercise_id):
 # Forgot Password endpoint
 @app.route('/forgot_password', methods=['POST'])
 def forgot_password():
-    data = request.json  
-    user = User.query.filter_by(email=data).first()
+    data = request.json
+    email = data.get("email")  
+    user = User.query.filter_by(email=email).first()
     if not user:
         return jsonify({'message': 'User not found'}), 404
     
@@ -519,13 +520,13 @@ def reset_password(token):
     try:
         decoded_token = decode_token(token)
         user_id = decoded_token['sub']  
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.get(user_id)
 
         if not user:
             return jsonify({'message': 'Invalid token or user not found'}), 404
 
         data = request.json
-        new_password = data.get('new_password') 
+        new_password = data.get('password')
 
         if not new_password:
             return jsonify({'message': 'Password fields are required'}), 400
