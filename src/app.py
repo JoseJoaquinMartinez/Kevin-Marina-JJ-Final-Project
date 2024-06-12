@@ -501,12 +501,11 @@ def forgot_password():
     user = User.query.filter_by(email=data).first()
     if not user:
         return jsonify({'message': 'User not found'}), 404
-
-    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    token = serializer.dumps({'user_id': user.id}, salt=app.config['SECURITY_PASSWORD_SALT'])
-
-    frontend_url = app.config['FRONTEND_URL'] 
-    link = f"{frontend_url}/resetPassword/{token}"
+    
+    expire_time = timedelta(hours=1)
+    token = create_access_token(identity=user.id, expires_delta=expire_time)
+    
+    link = url_for('reset_password', token=token, _external=True)
 
     msg = Message('Password Reset Request', recipients=[data])
     msg.body = f'''Your link to reset your password is {link}. If you did not request a password reset, please ignore this email.'''
@@ -517,26 +516,46 @@ def forgot_password():
 
 @app.route('/reset_password/<token>', methods=['POST'])
 def reset_password(token):
-    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
-        data = serializer.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=3600)
-    except:
-        return jsonify({'message': 'Token is invalid or expired'}), 400
+        # Decode the token to get the user identity
+        user_id = get_jwt_identity(token=token)
+        user = User.query.get(user_id)
 
-    user = User.query.get(data['user_id'])
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
+        if not user:
+            return jsonify({'message': 'Invalid token or user not found'}), 404
 
-    new_password = request.json.get('password')
-    if not new_password:
-        return jsonify({'message': 'Password is required'}), 400
+        data = request.json
+        new_password = data
+        
+        if not new_password:
+            return jsonify({'message': 'Password fields are required'}), 400
 
-    user.password = new_password 
-    db.session.commit()
+        user.password = new_password
+        db.session.commit()
 
-    return jsonify({'message': 'Password has been reset'}), 200
+        return jsonify({'message': 'Password reset successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'message': 'Invalid or expired token'}), 400
+
+@app.route('/verify_reset_token/<token>', methods=['GET'])
+def verify_reset_token(token):
+    try:
+        user_id = get_jwt_identity(token=token)
+        user = User.query.get(user_id)
+
+        if not user:
+            return jsonify({'message': 'Invalid token or user not found'}), 404
+
+        return jsonify({'message': 'Valid token'}), 200
+
+    except Exception as e:
+        return jsonify({'message': 'Invalid or expired token'}), 400
+    
+
 
 
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
+

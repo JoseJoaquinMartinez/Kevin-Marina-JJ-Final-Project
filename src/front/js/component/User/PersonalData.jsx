@@ -49,7 +49,20 @@ const PersonalData = () => {
   };
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+    if (file && validImageTypes.includes(file.type)) {
+      setSelectedFile(file);
+    } else {
+      setSelectedFile(null);
+      Swal.fire({
+        title: "Invalid File Type",
+        text: "Please upload a valid image file (jpg, jpeg, png).",
+        icon: "error",
+        showConfirmButton: true,
+      });
+    }
   };
 
   const handleUploadImage = async () => {
@@ -124,7 +137,12 @@ const PersonalData = () => {
         )}
         {showFileInput && (
           <div className="file-input-container">
-            <input type="file" onChange={handleFileChange} className='picture-input' />
+            <input
+              type="file"
+              onChange={handleFileChange}
+              accept='image/jpeg, image/jpg, image/png'
+              className='picture-input'
+            />
             <button
               onClick={handleUploadImage}
               disabled={!selectedFile}

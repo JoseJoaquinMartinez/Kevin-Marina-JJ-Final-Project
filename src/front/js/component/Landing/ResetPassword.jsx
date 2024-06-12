@@ -1,14 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Loader from "../User/loader.jsx";
 
 import '../../../styles/Landing-styles/resetPassword.css';
+import { CgPassword } from 'react-icons/cg';
 
 const ResetPassword = () => {
     const { token } = useParams();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [validToken, setValidToken] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const verifyToken = async () => {
+            const response = await fetch(`${process.env.BACKEND_URL}/verify_reset_token/${token}`, {
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                setValidToken(true);
+            } else {
+                Swal.fire({
+                    title: 'Invalid or expired token',
+                    icon: 'error',
+                    showConfirmButton: true,
+                });
+                navigate('/');
+            }
+        };
+
+        verifyToken();
+    }, [token, navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -36,7 +60,7 @@ const ResetPassword = () => {
                 showConfirmButton: false,
                 timer: 2000,
             });
-            navigate('/');
+            navigate('/login');
         } else {
             const data = await response.json();
             Swal.fire({
@@ -46,29 +70,36 @@ const ResetPassword = () => {
                 showConfirmButton: true,
             });
         }
-    }
+    };
 
     return (
         <div className='reset-password-container'>
-            <form onSubmit={handleSubmit} className='reset-password-form'>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter new password"
-                    className="reset-input"
-                    required
-                />
-                <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm new password"
-                    className="reset-input"
-                    required
-                />
-                <button type="submit" className="reset-button">Reset Password</button>
-            </form>
+            {validToken ? (
+                <form onSubmit={handleSubmit} className='reset-password-form'>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter new password"
+                        className="reset-input"
+                        required
+                    />
+                    <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Confirm new password"
+                        className="reset-input"
+                        required
+                    />
+                    <button type="submit" className="reset-button">Reset Password</button>
+                </form>
+            ) : (
+                <div className='loader-container'>
+                    <p>Verifying token...</p>
+                    <Loader />
+                </div>
+            )}
         </div>
     );
 };
