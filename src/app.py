@@ -7,7 +7,7 @@ from api.models import db, Trainer, Trainer_data, User, User_data, Routines, Exe
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager, decode_token
 from datetime import timedelta
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -517,31 +517,32 @@ def forgot_password():
 @app.route('/reset_password/<token>', methods=['POST'])
 def reset_password(token):
     try:
-        
-        user_id = get_jwt_identity(token=token)
+        decoded_token = decode_token(token)
+        user_id = decoded_token['sub']  
         user = User.query.get(user_id)
 
         if not user:
             return jsonify({'message': 'Invalid token or user not found'}), 404
 
         data = request.json
-        new_password = data
-        
+        new_password = data.get('new_password') 
+
         if not new_password:
             return jsonify({'message': 'Password fields are required'}), 400
 
-        user.password = new_password
+        user.password = new_password  
         db.session.commit()
 
         return jsonify({'message': 'Password reset successfully'}), 200
 
     except Exception as e:
-        return jsonify({'message': 'Invalid or expired token'}), 400
+        return jsonify({'message': 'Invalid or expired token', 'error': str(e)}), 400
 
 @app.route('/verify_reset_token/<token>', methods=['GET'])
 def verify_reset_token(token):
     try:
-        user_id = get_jwt_identity(token=token)
+        decoded_token = decode_token(token)
+        user_id = decoded_token['sub']  
         user = User.query.get(user_id)
 
         if not user:
@@ -550,7 +551,7 @@ def verify_reset_token(token):
         return jsonify({'message': 'Valid token'}), 200
 
     except Exception as e:
-        return jsonify({'message': 'Invalid or expired token'}), 400
+        return jsonify({'message': 'Invalid or expired token', 'error': str(e)}), 400
     
 
 
