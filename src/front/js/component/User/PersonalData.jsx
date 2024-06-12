@@ -119,7 +119,7 @@ const PersonalData = () => {
     }
   };
 
-  if (isLoading) {
+  if (!store.user_data) {
     return (
       <div className='loader-container'>
         <h4>Loading...</h4>
