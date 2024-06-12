@@ -39,7 +39,7 @@ const ResetPassword = () => {
                 showConfirmButton: false,
                 timer: 2000,
             });
-            navigate('/login');
+            navigate('/');
         } else {
             const data = await response.json();
             Swal.fire({
