@@ -519,7 +519,7 @@ def reset_password(token):
     try:
         decoded_token = decode_token(token)
         user_id = decoded_token['sub']  
-        user = User.query.get(user_id)
+        user = User.query.filter_by(id=user_id).first()
 
         if not user:
             return jsonify({'message': 'Invalid token or user not found'}), 404
@@ -537,7 +537,7 @@ def reset_password(token):
 
     except Exception as e:
         return jsonify({'message': 'Invalid or expired token', 'error': str(e)}), 400
-
+""" 
 @app.route('/verify_reset_token/<token>', methods=['GET'])
 def verify_reset_token(token):
     try:
@@ -551,7 +551,7 @@ def verify_reset_token(token):
         return jsonify({'message': 'Valid token'}), 200
 
     except Exception as e:
-        return jsonify({'message': 'Invalid or expired token', 'error': str(e)}), 400
+        return jsonify({'message': 'Invalid or expired token', 'error': str(e)}), 400 """
     
 
 
