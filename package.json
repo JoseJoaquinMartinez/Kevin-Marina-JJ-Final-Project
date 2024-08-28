@@ -11,19 +11,9 @@
     "build": "webpack --config webpack.prod.js --mode production"
   },
   "author": {
-    "name": "Alejandro Sanchez",
-    "url": "http://alesanchezr.com/"
+    "name": "José Joaquín Martínez",
+    "url": "https://josejoaquin-portfolio.netlify.app/"
   },
-  "contributors": [
-    {
-      "name": "Alejandro Sanchez",
-      "url": "http://alesanchezr.com/"
-    },
-    {
-      "name": "Ignacio Cordoba",
-      "url": "http://github.com/nachovz"
-    }
-  ],
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.16.0",
