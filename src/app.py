@@ -267,8 +267,6 @@ def upload_user_profile_picture(user_id):
 @jwt_required()
 def get_user_profile_picture(user_id):
     user_profile_image = Image.query.filter_by(user_data_id=user_id).first()
-    if not user_profile_image:
-        raise APIException('User profile image not found', status_code=404)
 
     image_data = {
         'id': user_profile_image.id,
@@ -355,9 +353,7 @@ def get_actual_routine(user_id):
     if user_routine:
         app.logger.info(f'User routine found for user_id: {user_id}')
         return jsonify(user_routine.serialize())
-    else:
-        app.logger.warning(f'No user routine found for user_id: {user_id}')
-        raise APIException('No user routine found', status_code=404)
+    
         
 
 #Get the particular user's Historical 
